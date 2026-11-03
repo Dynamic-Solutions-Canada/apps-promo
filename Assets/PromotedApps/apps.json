@@ -58,7 +58,7 @@
       "destination": "ms-windows-store://pdp/?ProductId=9P3ZZBDQ6PJF",
       "actionLabel": "View in Store",
       "name": "Little Launcher",
-      "blurb": "Little Launcher puts your apps, websites and web pages one click away, in a flyout that opens from the system tray or the taskbar.",
+      "blurb": "Launch apps and websites from your tray on Windows and Linux. Windows is available in the Store; Linux uses AppImage.",
       "packageFamilyName": "27766TechnicallyReal.LittleLauncher_gfb69tsnc4jnp",
       "icon": "9P3ZZBDQ6PJF.png",
       "appId": "little-launcher",

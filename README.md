@@ -68,3 +68,5 @@ Every app must appear exactly once. Consumers retain that order when hiding
 their own product. An optional `name` in `appOverrides` pins a publisher-approved
 display name instead of the current Store listing title; stable `appId` values
 remain unchanged when a product is renamed.
+
+Little Launcher's catalog description covers Windows and Linux AppImage. Keep that wording in `ids.json` under `blurbOverrides` as well as the generated manifest so refreshes preserve it. Its existing Store destination is for Windows; Linux AppImage downloads are available from the Little Launcher GitHub releases page.
