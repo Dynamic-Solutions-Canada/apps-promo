@@ -29,6 +29,26 @@ Add a nav item (e.g. in `NavigationView.FooterMenuItems`) that navigates to
 
 CI note: checkouts need submodules, e.g. `actions/checkout` with `submodules: true`.
 
+## Page language (optional)
+
+The WinUI page bundles its own UI text (title, subtitle, and the known action labels
+"View in Store", "Visit website", "Open") in `Views/PromoLocalization.cs`, in the same
+nine locale identities the apps use: `en-US`, `en-CA`, `es-ES`, `fr-FR`, `fr-CA`, `de-DE`,
+`zh-CN`, `pt-BR`, `ja-JP`. Canadian locales reuse the en-US / fr-FR wording; anything
+unsupported (including Traditional Chinese) falls back to English. App names and
+blurbs come from the manifest and are not translated.
+
+Apps that do nothing get Windows' preferred languages. Apps with their own language
+setting point the page at it once at startup and refresh it when the language changes:
+
+```csharp
+TechnicallyReal.Promo.PromoLocalization.LocaleProvider = () => UiText.Locale; // e.g. "fr-CA"; null = follow Windows
+UiText.Changed += TechnicallyReal.Promo.PromoLocalization.Refresh;             // open promo pages re-apply their text
+```
+
+The page never references a consumer's localization classes. When adding a string,
+key it by the English text and add it to every table in `PromoLocalization.cs`.
+
 ## Updating the promoted apps
 
 1. Add/remove Store product IDs in `ids.json` and add their stable `appId` and

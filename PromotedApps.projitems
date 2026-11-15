@@ -18,6 +18,9 @@
       <DependentUpon>PromotedAppsPage.xaml</DependentUpon>
       <Link>PromotedApps\PromotedAppsPage.xaml.cs</Link>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PromoLocalization.cs">
+      <Link>PromotedApps\PromoLocalization.cs</Link>
+    </Compile>
     <Content Include="$(MSBuildThisFileDirectory)Assets\PromotedApps\**\*.*">
       <Link>Assets\PromotedApps\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

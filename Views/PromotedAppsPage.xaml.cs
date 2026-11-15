@@ -42,13 +42,15 @@ public sealed partial class PromotedAppsPage : Page
     {
         InitializeComponent();
 
-        string cacheDirectory = GetCacheDirectory();
-        List<PromotedApp> apps = LoadApps(cacheDirectory);
-        if (apps.Count == 0)
-            apps = LoadApps(GetBundledDirectory());
-
-        AppList.ItemsSource = apps;
+        ApplyText();
+        AppList.ItemsSource = LoadDisplayedApps();
         Loaded += PromotedAppsPage_Loaded;
+        Loaded += (_, _) =>
+        {
+            PromoLocalization.Changed -= PromoLocalization_Changed;
+            PromoLocalization.Changed += PromoLocalization_Changed;
+        };
+        Unloaded += (_, _) => PromoLocalization.Changed -= PromoLocalization_Changed;
     }
 
     /// <summary>
@@ -62,6 +64,36 @@ public sealed partial class PromotedAppsPage : Page
         List<PromotedApp> apps = await RefreshCacheAsync();
         if (apps.Count > 0)
             AppList.ItemsSource = apps;
+    }
+
+    /// <summary>Re-applies the page's text after the consumer changes its UI language.</summary>
+    private void PromoLocalization_Changed()
+    {
+        void Apply()
+        {
+            ApplyText();
+            AppList.ItemsSource = LoadDisplayedApps();
+        }
+
+        if (DispatcherQueue.HasThreadAccess)
+            Apply();
+        else
+            DispatcherQueue.TryEnqueue(Apply);
+    }
+
+    private void ApplyText()
+    {
+        // Picks the right CJK font fallback (Japanese vs Simplified Chinese glyphs).
+        Language = PromoLocalization.CurrentWording;
+        TitleText.Text = PromoLocalization.Get("Our other apps");
+        SubtitleText.Text = PromoLocalization.Get("More from Dynamic Solutions Canada on the Microsoft Store.");
+    }
+
+    /// <summary>Loads the cached manifest, or the bundled one on a first offline visit.</summary>
+    private static List<PromotedApp> LoadDisplayedApps()
+    {
+        List<PromotedApp> apps = LoadApps(GetCacheDirectory());
+        return apps.Count > 0 ? apps : LoadApps(GetBundledDirectory());
     }
 
     /// <summary>Returns the immutable promo assets shipped with the consuming app.</summary>
@@ -184,9 +216,10 @@ public sealed partial class PromotedAppsPage : Page
                 apps.Add(new PromotedApp
                 {
                     Destination = GetDestination(app),
-                    ActionLabel = app.TryGetProperty("actionLabel", out var actionLabel)
+                    // Manifest labels are English; known ones are translated, others pass through.
+                    ActionLabel = PromoLocalization.Get(app.TryGetProperty("actionLabel", out var actionLabel)
                         ? actionLabel.GetString() ?? "Open"
-                        : "View in Store",
+                        : "View in Store"),
                     Name = app.GetProperty("name").GetString() ?? "",
                     Blurb = app.GetProperty("blurb").GetString() ?? "",
                     Icon = File.Exists(iconPath) ? new BitmapImage(new Uri(iconPath)) : null,
