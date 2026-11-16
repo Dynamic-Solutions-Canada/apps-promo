@@ -13,7 +13,7 @@ export interface CatalogApp {
   links: AppLink[]
 }
 
-export const CATALOG_BASE_URL = 'https://raw.githubusercontent.com/RyanEwen/technicallyreal-promo/main/Assets/PromotedApps/'
+export const CATALOG_BASE_URL = 'https://raw.githubusercontent.com/Dynamic-Solutions-Canada/apps-promo/main/Assets/PromotedApps/'
 
 /** Validate untrusted remote or cached data before displaying it or following links. */
 export function parseCatalog(value: unknown): CatalogApp[] {

@@ -21,7 +21,7 @@ namespace TechnicallyReal.Promo;
 public sealed partial class PromotedAppsPage : Page
 {
     private static readonly Uri ManifestUri = new(
-        "https://raw.githubusercontent.com/RyanEwen/technicallyreal-promo/main/Assets/PromotedApps/apps.json");
+        "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/apps-promo/main/Assets/PromotedApps/apps.json");
 
     private static readonly HttpClient HttpClient = new()
     {

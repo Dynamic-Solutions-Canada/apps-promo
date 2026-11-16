@@ -1,4 +1,4 @@
-# technicallyreal-promo
+# apps-promo
 
 Shared "Our other apps" catalog and WinUI 3 page for Dynamic Solutions Canada's apps. Each Windows app bundles this
 as a git submodule; the page cross-promotes the publisher's Store and web apps
@@ -10,12 +10,16 @@ persist the last successful manifest and icons in app-local storage. Bundled ass
 an offline first-run fallback, so the page renders even when GitHub is unavailable.
 
 The public generated manifest is also available at
-`https://raw.githubusercontent.com/RyanEwen/technicallyreal-promo/main/Assets/PromotedApps/apps.json`.
+`https://raw.githubusercontent.com/Dynamic-Solutions-Canada/apps-promo/main/Assets/PromotedApps/apps.json`.
+
+## Permanent URLs
+
+Installed copies of every shipped app fetch the catalog from a fixed URL, and they cannot be patched. App releases before this repo's rename fetch it through the old name, `RyanEwen/technicallyreal-promo`, which GitHub redirects here. That redirect holds only while the old name stays unused, so never create a repository at `RyanEwen/technicallyreal-promo`. For the same reason, `Assets/PromotedApps/apps.json` on `main` must never be renamed or moved.
 
 ## Consuming (per app, one-time)
 
 ```powershell
-git submodule add https://github.com/RyanEwen/technicallyreal-promo external/promo
+git submodule add https://github.com/Dynamic-Solutions-Canada/apps-promo external/promo
 ```
 
 In the app's `.csproj`:
