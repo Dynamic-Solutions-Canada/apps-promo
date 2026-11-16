@@ -2,7 +2,7 @@
  * Consistency checks between the hand-edited catalog source (`ids.json`) and the
  * generated public catalog (`Assets/PromotedApps/apps.json`).
  *
- * `refresh.ps1` derives the manifest from `ids.json`, but catalog edits are also
+ * `refresh-catalog.ps1` derives the manifest from `ids.json`, but catalog edits are also
  * made to both files by hand (README, "Updating the promoted apps"), so the two
  * can drift. A drift is invisible until the next refresh silently drops an edit,
  * which is why the gate checks it on every change.
@@ -144,7 +144,7 @@ function sourceLinksByAppId(
 /**
  * Map each manifest `appId` to its links exactly as committed. `parseCatalog` normalises
  * URLs (adding a trailing slash, for example), so its output cannot be compared with
- * `ids.json`, which `refresh.ps1` copies verbatim. Call only after `parseCatalog` passed.
+ * `ids.json`, which `refresh-catalog.ps1` copies verbatim. Call only after `parseCatalog` passed.
  */
 function rawLinksByAppId(manifest: unknown): Map<string, unknown> {
   const apps = (manifest as { apps: { appId: string; links: unknown }[] }).apps
@@ -153,7 +153,7 @@ function rawLinksByAppId(manifest: unknown): Map<string, unknown> {
 
 /**
  * `ids.json` and the manifest define the same apps with the same links, so a later
- * `refresh.ps1` run reproduces the committed manifest instead of dropping an edit.
+ * `refresh-catalog.ps1` run reproduces the committed manifest instead of dropping an edit.
  */
 function checkSourceLinks(
   manifestLinks: Map<string, unknown>,

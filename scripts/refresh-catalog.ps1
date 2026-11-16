@@ -1,4 +1,4 @@
-# refresh.ps1 - regenerates Assets/PromotedApps from live Microsoft Store listings.
+# refresh-catalog.ps1 - regenerates Assets/PromotedApps from live Microsoft Store listings.
 #
 # Dev-side tool only: run it occasionally (e.g. when publishing a new app or before a
 # release), review the diff, and commit the result. Consuming apps bundle the generated
@@ -8,7 +8,8 @@
 
 $ErrorActionPreference = "Stop"
 
-$root = $PSScriptRoot
+# The catalog files live at the repo root, one level above this script.
+$root = Split-Path -Parent $PSScriptRoot
 $outDir = Join-Path $root "Assets\PromotedApps"
 $ids = Get-Content (Join-Path $root "ids.json") -Raw | ConvertFrom-Json
 
