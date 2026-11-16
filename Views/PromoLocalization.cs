@@ -38,7 +38,9 @@ public static class PromoLocalization
             {
                 string? locale = LocaleProvider?.Invoke();
                 if (!string.IsNullOrWhiteSpace(locale))
+                {
                     return ResolveWording(new[] { locale! });
+                }
             }
             catch { /* a broken hook must never break the promo page */ }
 
@@ -51,7 +53,10 @@ public static class PromoLocalization
     {
         if (Strings.TryGetValue(CurrentWording, out var table) &&
             table.TryGetValue(english, out var text))
+        {
             return text;
+        }
+
         return english;
     }
 
@@ -64,7 +69,9 @@ public static class PromoLocalization
         foreach (string preference in preferences)
         {
             if (string.IsNullOrWhiteSpace(preference))
+            {
                 continue;
+            }
 
             string[] parts = preference.Trim().Replace('_', '-').Split('-');
             switch (parts[0].ToLowerInvariant())
@@ -76,7 +83,11 @@ public static class PromoLocalization
                 case "pt": return "pt-BR";
                 case "ja": return "ja-JP";
                 case "zh":
-                    if (IsSimplifiedChinese(parts)) return "zh-CN";
+                    if (IsSimplifiedChinese(parts))
+                    {
+                        return "zh-CN";
+                    }
+
                     break;
             }
         }
@@ -89,12 +100,22 @@ public static class PromoLocalization
         for (int i = 1; i < parts.Length; i++)
         {
             string part = parts[i];
-            if (part.Length == 1) break; // extensions (-u-, -x-) are not wording identity
-            if (part.Length == 4) return part.Equals("Hans", StringComparison.OrdinalIgnoreCase);
+            if (part.Length == 1)
+            {
+                break; // extensions (-u-, -x-) are not wording identity
+            }
+
+            if (part.Length == 4)
+            {
+                return part.Equals("Hans", StringComparison.OrdinalIgnoreCase);
+            }
+
             if (part.Equals("TW", StringComparison.OrdinalIgnoreCase) ||
                 part.Equals("HK", StringComparison.OrdinalIgnoreCase) ||
                 part.Equals("MO", StringComparison.OrdinalIgnoreCase))
+            {
                 return false;
+            }
         }
         return true;
     }
@@ -106,7 +127,10 @@ public static class PromoLocalization
         catch { /* fall back to the process UI culture */ }
 
         if (languages is { Count: > 0 })
+        {
             return languages;
+        }
+
         return new[] { CultureInfo.CurrentUICulture.Name };
     }
 

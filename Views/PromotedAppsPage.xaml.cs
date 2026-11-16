@@ -63,7 +63,9 @@ public sealed partial class PromotedAppsPage : Page
 
         List<PromotedApp> apps = await RefreshCacheAsync();
         if (apps.Count > 0)
+        {
             AppList.ItemsSource = apps;
+        }
     }
 
     /// <summary>Re-applies the page's text after the consumer changes its UI language.</summary>
@@ -76,9 +78,13 @@ public sealed partial class PromotedAppsPage : Page
         }
 
         if (DispatcherQueue.HasThreadAccess)
+        {
             Apply();
+        }
         else
+        {
             DispatcherQueue.TryEnqueue(Apply);
+        }
     }
 
     private void ApplyText()
@@ -136,7 +142,9 @@ public sealed partial class PromotedAppsPage : Page
 
             if (File.Exists(cachedManifestPath) &&
                 string.Equals(await File.ReadAllTextAsync(cachedManifestPath), manifest, StringComparison.Ordinal))
+            {
                 return LoadApps(cacheDirectory);
+            }
 
             Directory.CreateDirectory(cacheDirectory);
             using var document = JsonDocument.Parse(manifest);
@@ -145,7 +153,9 @@ public sealed partial class PromotedAppsPage : Page
             {
                 string icon = app.GetProperty("icon").GetString() ?? "";
                 if (icon.Length == 0 || !string.Equals(icon, Path.GetFileName(icon), StringComparison.Ordinal))
+                {
                     throw new InvalidDataException("Promo icon paths must be simple file names.");
+                }
 
                 byte[] iconBytes = await HttpClient.GetByteArrayAsync(new Uri(ManifestUri, icon));
                 await WriteBytesAtomicallyAsync(Path.Combine(cacheDirectory, icon), iconBytes);
@@ -172,7 +182,9 @@ public sealed partial class PromotedAppsPage : Page
         finally
         {
             if (File.Exists(temporaryPath))
+            {
                 File.Delete(temporaryPath);
+            }
         }
     }
 
@@ -188,7 +200,9 @@ public sealed partial class PromotedAppsPage : Page
         finally
         {
             if (File.Exists(temporaryPath))
+            {
                 File.Delete(temporaryPath);
+            }
         }
     }
 
@@ -199,7 +213,10 @@ public sealed partial class PromotedAppsPage : Page
         try
         {
             string jsonPath = Path.Combine(directory, "apps.json");
-            if (!File.Exists(jsonPath)) return apps;
+            if (!File.Exists(jsonPath))
+            {
+                return apps;
+            }
 
             string? currentPfn = null;
             try { currentPfn = global::Windows.ApplicationModel.Package.Current.Id.FamilyName; }
@@ -210,7 +227,9 @@ public sealed partial class PromotedAppsPage : Page
             {
                 string pfn = app.GetProperty("packageFamilyName").GetString() ?? "";
                 if (currentPfn != null && string.Equals(pfn, currentPfn, StringComparison.OrdinalIgnoreCase))
+                {
                     continue;
+                }
 
                 string iconPath = Path.Combine(directory, app.GetProperty("icon").GetString() ?? "");
                 apps.Add(new PromotedApp
@@ -237,10 +256,14 @@ public sealed partial class PromotedAppsPage : Page
     private static string GetDestination(JsonElement app)
     {
         if (app.TryGetProperty("destination", out var destination))
+        {
             return destination.GetString() ?? "";
+        }
 
         if (app.TryGetProperty("id", out var productId))
+        {
             return "ms-windows-store://pdp/?ProductId=" + productId.GetString();
+        }
 
         return "";
     }
@@ -250,7 +273,9 @@ public sealed partial class PromotedAppsPage : Page
     {
         if ((sender as FrameworkElement)?.Tag is not string destination ||
             !Uri.TryCreate(destination, UriKind.Absolute, out var uri))
+        {
             return;
+        }
 
         _ = await global::Windows.System.Launcher.LaunchUriAsync(uri);
     }
