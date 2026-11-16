@@ -44,17 +44,23 @@ The repo owns the catalog data, the script that regenerates it, the WinUI page a
 
 The WinUI page has no host in this repo. XAML and C# changes are checked by building a consuming app against this working tree, never by building a real app checkout.
 
+## Release
+
+A page-code or `catalog.ts` change is released as an annotated `vX.Y.Z` tag, with the version in `package.json` and user-facing notes in `release-notes/<version>.md`; the `Release` workflow creates the GitHub Release from them. Catalog-only changes are never released. Follow the `release` skill in `.agents/skills/release/`.
+
 ## Guidance map
 
-| Guide, doc, or skill | Read or use when                                             | Governs                                                                 |
-| -------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| `README.md`          | Consuming the page or catalog, or updating the promoted apps | Consumer setup, localization hook, catalog update steps, permanent URLs |
-| `LICENSE`            | Adding files or changing the copyright line                  | Licence and holder; the README's License section repeats the holder     |
+| Guide, doc, or skill | Read or use when                                             | Governs                                                                   |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `README.md`          | Consuming the page or catalog, or updating the promoted apps | Consumer setup, localization hook, catalog update steps, permanent URLs   |
+| `LICENSE`            | Adding files or changing the copyright line                  | Licence and holder; the README's License section repeats the holder       |
+| `release` skill      | Releasing a page-code or `catalog.ts` change                 | `package.json` version, `release-notes/`, tags and the `Release` workflow |
 
 ## Keeping docs current
 
-| What changed                               | Update                                                          |
-| ------------------------------------------ | --------------------------------------------------------------- |
-| A permanent path, name or URL              | This file's "Permanent names" and the README's "Permanent URLs" |
-| How consumers import or configure the page | README "Consuming" and "Page language"                          |
-| A command                                  | The Commands table above                                        |
+| What changed                               | Update                                                                              |
+| ------------------------------------------ | ----------------------------------------------------------------------------------- |
+| A permanent path, name or URL              | This file's "Permanent names" and the README's "Permanent URLs"                     |
+| How consumers import or configure the page | README "Consuming" and "Page language"                                              |
+| A command                                  | The Commands table above                                                            |
+| Page code, `catalog.ts` or the projitems   | Release it with the `release` skill; README "Versioning" says whether it is a major |

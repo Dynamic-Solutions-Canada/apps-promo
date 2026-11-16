@@ -51,9 +51,24 @@ Little Launcher's catalog description covers Windows and Linux AppImage. Keep th
 
 1. Add/remove Store product IDs in `ids.json` and add their stable `appId` and platform `links` under `appOverrides` (optionally set a `blurbOverrides` entry to replace the auto-extracted first line of the Store description). Add web apps under `externalApps`, including a destination and a repository-owned icon URL.
 2. Run `npm run catalog:refresh` (or `.\scripts\refresh-catalog.ps1`) in Windows PowerShell: it queries the Store's StoreEdgeFD endpoint and regenerates `Assets/PromotedApps/apps.json` plus the icon files.
-3. Run `npm run validate`, which checks that `ids.json`, the manifest and the icons still agree. Then review, commit, and push the diff. Existing app releases receive the update the next time their promo page opens; bump the submodule only when shared page code changes.
+3. Run `npm run validate`, which checks that `ids.json`, the manifest and the icons still agree. Then review, commit, and push the diff. Existing app releases receive the update the next time their promo page opens, so a catalog-only change needs no release and no pin bump (see "Versioning").
 
 `refresh-catalog.ps1` is the only thing that talks to the Store backend. The runtime only reads the committed GitHub manifest and its icons, so Store endpoint changes cannot break shipped apps.
+
+## Versioning
+
+Each release is an annotated `vX.Y.Z` tag with a GitHub Release whose notes say what changed for apps. The version lives in `package.json`, and the notes for each version are committed in `release-notes/`. Versions follow SemVer:
+
+- **Major:** anything that needs an edit in a consuming app: renaming or removing anything listed under "Permanent URLs" or in the "Consuming" steps, a new resource the host app must provide, or a change to the `catalog.ts` contract that breaks existing callers.
+- **Minor:** new page or `catalog.ts` behaviour that needs no edit in the app.
+- **Patch:** fixes that do not change documented behaviour.
+
+Apps pin a tag, never a bare commit, and every app stays on the same tag. When the page's code changes (layout, localization, fetch logic), each app bumps its pin in its next release at the latest. A catalog-only change (`ids.json` and `Assets/PromotedApps/`) is not released and needs no bump, because the catalog reaches shipped apps at runtime. To take a new version, check the tag out in the submodule and commit the pin bump with the subject `Update Apps Promo: <what it changes for this app>`:
+
+```bash
+git -C external/promo fetch --tags
+git -C external/promo checkout vX.Y.Z
+```
 
 ## Permanent URLs
 
