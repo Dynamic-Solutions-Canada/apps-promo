@@ -5,7 +5,12 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { findCatalogProblems } from './catalog-checks.js'
+import {
+  findCatalogProblems,
+  ICON_SIZE,
+  listIconsBelowTarget,
+  type CatalogInputs,
+} from './catalog-checks.js'
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url))
 const assetsDir = join(repoRoot, 'Assets', 'PromotedApps')
@@ -15,12 +20,19 @@ function readJson(relativePath: string): unknown {
   return JSON.parse(readFileSync(join(repoRoot, relativePath), 'utf8'))
 }
 
-const problems = findCatalogProblems({
+/** Read an icon from `Assets/PromotedApps/`, or `undefined` when it is not committed. */
+function readIcon(fileName: string): Uint8Array | undefined {
+  const path = join(assetsDir, fileName)
+  return existsSync(path) ? readFileSync(path) : undefined
+}
+
+const inputs: CatalogInputs = {
   ids: readJson('ids.json'),
   manifest: readJson('Assets/PromotedApps/apps.json'),
-  iconExists: (fileName) => existsSync(join(assetsDir, fileName)),
-})
+  readIcon,
+}
 
+const problems = findCatalogProblems(inputs)
 if (problems.length > 0) {
   console.error('check:catalog: the catalog is inconsistent:')
   for (const problem of problems) {
@@ -30,3 +42,11 @@ if (problems.length > 0) {
 }
 
 console.log('check:catalog: ids.json, apps.json and the icons agree.')
+
+// Progress toward 256 px icons; not a failure until each app repo publishes its icon.
+const below = listIconsBelowTarget(inputs)
+if (below.length > 0) {
+  console.log(
+    `check:catalog: not yet ${ICON_SIZE} px: ${below.join(', ')}. See "Icons" in the README.`,
+  )
+}

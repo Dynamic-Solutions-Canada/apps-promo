@@ -58,9 +58,10 @@ A page-code or `catalog.ts` change is released as an annotated `vX.Y.Z` tag, wit
 
 ## Keeping docs current
 
-| What changed                               | Update                                                                              |
-| ------------------------------------------ | ----------------------------------------------------------------------------------- |
-| A permanent path, name or URL              | This file's "Permanent names" and the README's "Permanent URLs"                     |
-| How consumers import or configure the page | README "Consuming" and "Page language"                                              |
-| A command                                  | The Commands table above                                                            |
-| Page code, `catalog.ts` or the projitems   | Release it with the `release` skill; README "Versioning" says whether it is a major |
+| What changed                                                            | Update                                                                              |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| A permanent path, name or URL                                           | This file's "Permanent names" and the README's "Permanent URLs"                     |
+| How consumers import or configure the page                              | README "Consuming" and "Page language"                                              |
+| A command                                                               | The Commands table above                                                            |
+| Page code, `catalog.ts` or the projitems                                | Release it with the `release` skill; README "Versioning" says whether it is a major |
+| An app gains a public listing, or an app repo publishes its 256 px icon | `ids.json` and a catalog refresh; README "Apps not yet in the catalog" and "Icons"  |

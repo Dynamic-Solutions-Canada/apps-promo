@@ -26,6 +26,49 @@ function Get-BriefDescription([string]$text, [int]$maxLen = 180) {
     return $cut.TrimEnd(".,;: ") + "..."
 }
 
+# Catalog icons are 256 px squares (PROMO-5). Each app repo publishes one at
+# assets/generated/icon-256.png (ASSET-12); npm run check:catalog enforces the size
+# for entries that point there.
+$iconSize = 256
+
+# Read a PNG's width and height from its IHDR header, the same way
+# scripts/png-size.ts does. Returns $null when the file is not a PNG.
+function Get-PngSize([string]$path) {
+    $bytes = [System.IO.File]::ReadAllBytes($path)
+    $signature = 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A
+    if ($bytes.Length -lt 24) { return $null }
+    for ($i = 0; $i -lt 8; $i++) {
+        if ($bytes[$i] -ne $signature[$i]) { return $null }
+    }
+    if ([System.Text.Encoding]::ASCII.GetString($bytes, 12, 4) -ne "IHDR") { return $null }
+
+    # PNG integers are big-endian.
+    $width = ([int]$bytes[16] -shl 24) -bor ([int]$bytes[17] -shl 16) -bor ([int]$bytes[18] -shl 8) -bor [int]$bytes[19]
+    $height = ([int]$bytes[20] -shl 24) -bor ([int]$bytes[21] -shl 16) -bor ([int]$bytes[22] -shl 8) -bor [int]$bytes[23]
+    return [pscustomobject]@{ Width = $width; Height = $height }
+}
+
+# Download an icon, refuse anything that is not a square PNG, and warn while it is
+# not yet 256 px (the Store's own logos are 50 px). The download goes to a temporary
+# file first, so a rejected icon never replaces the committed one.
+function Save-Icon([string]$url, [string]$fileName, [string]$label) {
+    $path = Join-Path $outDir $fileName
+    $download = "$path.download"
+    Invoke-WebRequest $url -OutFile $download | Out-Null
+
+    $size = Get-PngSize $download
+    if (-not $size -or $size.Width -ne $size.Height) {
+        Remove-Item $download
+        if (-not $size) { throw "Icon for $label is not a PNG: $url" }
+        throw "Icon for $label is not square ($($size.Width)x$($size.Height)): $url"
+    }
+    if ($size.Width -ne $iconSize) {
+        Write-Warning "Icon for $label is $($size.Width) px, not $iconSize px. Set iconUrl to the app repo's assets/generated/icon-256.png once it exists."
+    }
+
+    Move-Item -Force $download $path
+}
+
 $apps = @()
 foreach ($id in $ids.productIds) {
     Write-Host "Fetching $id ..."
@@ -39,8 +82,12 @@ foreach ($id in $ids.productIds) {
     $imgUrl = $img.Url
     if ($imgUrl -and $imgUrl.StartsWith("//")) { $imgUrl = "https:" + $imgUrl }
 
+    # An iconUrl in appOverrides (the app repo's 256 px icon) replaces the Store logo.
+    $override = $ids.appOverrides.$id
+    if ($override -and $override.iconUrl) { $imgUrl = $override.iconUrl }
+
     $iconFile = "$id.png"
-    Invoke-WebRequest $imgUrl -OutFile (Join-Path $outDir $iconFile) | Out-Null
+    Save-Icon $imgUrl $iconFile $id
 
     $blurb = $null
     if ($ids.blurbOverrides -and $ids.blurbOverrides.PSObject.Properties[$id]) {
@@ -73,7 +120,7 @@ foreach ($id in $ids.productIds) {
 # Web apps use explicit repository-owned metadata instead of Store listing data.
 foreach ($externalApp in @($ids.externalApps)) {
     Write-Host "Fetching $($externalApp.name) icon ..."
-    Invoke-WebRequest $externalApp.iconUrl -OutFile (Join-Path $outDir $externalApp.icon) | Out-Null
+    Save-Icon $externalApp.iconUrl $externalApp.icon $externalApp.name
 
     $apps += [ordered]@{
         appId             = $externalApp.appId

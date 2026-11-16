@@ -8,12 +8,30 @@
  * which is why the gate checks it on every change.
  */
 import { parseCatalog, type AppLink, type CatalogApp } from '../catalog.js'
+import { readPngSize } from './png-size.js'
+
+/** Catalog icons are 256 px squares (PROMO-5, D-070). */
+export const ICON_SIZE = 256
+
+/**
+ * Where each app repo publishes its 256 px catalog icon (ASSET-12). An entry whose
+ * `iconUrl` ends with this path is held to {@link ICON_SIZE} exactly.
+ */
+export const APP_REPO_ICON_PATH = '/assets/generated/icon-256.png'
+
+/** One `ids.json` entry's fields these checks read. */
+interface SourceEntry {
+  appId: string
+  links?: AppLink[]
+  /** Optional on Store products; when set, it replaces the Store's 50 px logo. */
+  iconUrl?: string
+}
 
 /** The parts of `ids.json` these checks read. Everything else is ignored. */
 interface CatalogSource {
   productIds: string[]
-  externalApps: { appId: string; links?: AppLink[] }[]
-  appOverrides: Record<string, { appId: string; links?: AppLink[] }>
+  externalApps: SourceEntry[]
+  appOverrides: Record<string, SourceEntry>
   appOrder: string[]
 }
 
@@ -23,8 +41,8 @@ export interface CatalogInputs {
   ids: unknown
   /** Parsed `Assets/PromotedApps/apps.json`. */
   manifest: unknown
-  /** Whether an icon file name exists in `Assets/PromotedApps/`. */
-  iconExists: (fileName: string) => boolean
+  /** The bytes of an icon in `Assets/PromotedApps/`, or `undefined` when the file is missing. */
+  readIcon: (fileName: string) => Uint8Array | undefined
 }
 
 /**
@@ -53,8 +71,35 @@ export function findCatalogProblems(inputs: CatalogInputs): string[] {
       sourceLinksByAppId(source),
     ),
     ...checkLinksPerPlatform(apps),
-    ...checkIcons(apps, inputs.iconExists),
+    ...checkIcons(apps, iconUrlsByAppId(source), inputs.readIcon),
   ]
+}
+
+/**
+ * List the entries whose committed icon is not yet {@link ICON_SIZE} px, for example the
+ * Store's 50 px logos. This is progress, not a failure: each entry moves to a 256 px
+ * `iconUrl` once its app repo publishes one at {@link APP_REPO_ICON_PATH}.
+ *
+ * @returns `"<appId> (<width> px)"` per entry; empty once every icon is 256 px.
+ */
+export function listIconsBelowTarget(inputs: CatalogInputs): string[] {
+  let apps: CatalogApp[]
+  try {
+    apps = parseCatalog(inputs.manifest)
+  } catch {
+    return []
+  }
+
+  const below: string[] = []
+  for (const app of apps) {
+    const bytes = inputs.readIcon(app.icon)
+    const size = bytes ? readPngSize(bytes) : undefined
+    if (size && size.width !== ICON_SIZE) {
+      below.push(`${app.appId} (${size.width} px)`)
+    }
+  }
+
+  return below
 }
 
 /**
@@ -203,15 +248,65 @@ function checkLinksPerPlatform(apps: CatalogApp[]): string[] {
   return problems
 }
 
-/** Every icon the manifest names is committed beside it, for the offline fallback. */
+/**
+ * Map each `appId` to the `iconUrl` `ids.json` gives it, if any. Web apps always have one;
+ * Store products have one only once they move off the Store logo.
+ */
+function iconUrlsByAppId(source: CatalogSource): Map<string, string> {
+  const urls = new Map<string, string>()
+  const entries = [
+    ...Object.values(source.appOverrides),
+    ...source.externalApps,
+  ]
+
+  for (const entry of entries) {
+    if (entry?.appId && typeof entry.iconUrl === 'string') {
+      urls.set(entry.appId, entry.iconUrl)
+    }
+  }
+
+  return urls
+}
+
+/**
+ * Every icon the manifest names is committed beside it (the offline fallback), is a square
+ * PNG, and is exactly {@link ICON_SIZE} px when it comes from an app repo's published path.
+ */
 function checkIcons(
   apps: CatalogApp[],
-  iconExists: (fileName: string) => boolean,
+  iconUrls: Map<string, string>,
+  readIcon: (fileName: string) => Uint8Array | undefined,
 ): string[] {
-  return apps
-    .filter((app) => !iconExists(app.icon))
-    .map(
-      (app) =>
+  const problems: string[] = []
+
+  for (const app of apps) {
+    const bytes = readIcon(app.icon)
+    if (!bytes) {
+      problems.push(
         `${app.appId} icon ${app.icon} is missing from Assets/PromotedApps/`,
-    )
+      )
+      continue
+    }
+
+    const size = readPngSize(bytes)
+    if (!size) {
+      problems.push(`${app.appId} icon ${app.icon} is not a PNG`)
+      continue
+    }
+    if (size.width !== size.height) {
+      problems.push(
+        `${app.appId} icon ${app.icon} is ${size.width}x${size.height}; icons must be square`,
+      )
+      continue
+    }
+
+    const fromAppRepo = iconUrls.get(app.appId)?.endsWith(APP_REPO_ICON_PATH)
+    if (fromAppRepo && size.width !== ICON_SIZE) {
+      problems.push(
+        `${app.appId} icon ${app.icon} is ${size.width} px; ${APP_REPO_ICON_PATH} must be ${ICON_SIZE} px`,
+      )
+    }
+  }
+
+  return problems
 }

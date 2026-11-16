@@ -49,11 +49,33 @@ Little Launcher's catalog description covers Windows and Linux AppImage. Keep th
 
 ## Updating the promoted apps
 
-1. Add/remove Store product IDs in `ids.json` and add their stable `appId` and platform `links` under `appOverrides` (optionally set a `blurbOverrides` entry to replace the auto-extracted first line of the Store description). Add web apps under `externalApps`, including a destination and a repository-owned icon URL.
+1. Add/remove Store product IDs in `ids.json` and add their stable `appId` and platform `links` under `appOverrides` (optionally set a `blurbOverrides` entry to replace the auto-extracted first line of the Store description). Add web apps, and apps with no Microsoft Store listing, under `externalApps`, including a destination and a repository-owned icon URL. Give a Store product an `iconUrl` in its `appOverrides` entry once its 256 px icon exists (see "Icons").
 2. Run `npm run catalog:refresh` (or `.\scripts\refresh-catalog.ps1`) in Windows PowerShell: it queries the Store's StoreEdgeFD endpoint and regenerates `Assets/PromotedApps/apps.json` plus the icon files.
 3. Run `npm run validate`, which checks that `ids.json`, the manifest and the icons still agree. Then review, commit, and push the diff. Existing app releases receive the update the next time their promo page opens, so a catalog-only change needs no release and no pin bump (see "Versioning").
 
 `refresh-catalog.ps1` is the only thing that talks to the Store backend. The runtime only reads the committed GitHub manifest and its icons, so Store endpoint changes cannot break shipped apps.
+
+## Icons
+
+Catalog icons are 256 px squares, taken from each app repo at `assets/generated/icon-256.png` through the entry's `iconUrl` (in `appOverrides` for a Store product, in `externalApps` otherwise). Until an app repo publishes that file, its entry keeps its current icon: the Store's 50 px logo for Store products, and PrintStream's 192 px web icon.
+
+- `npm run catalog:refresh` uses an entry's `iconUrl` in place of the Store logo, refuses an icon that is not a square PNG, and warns while an icon is not 256 px.
+- `npm run check:catalog` fails when an icon is missing, is not a square PNG, or comes from `assets/generated/icon-256.png` without being 256 px. It lists the entries still below 256 px without failing.
+- Point an entry at an app repo's icon only once the file is published there; the refresh downloads it.
+
+## Apps not yet in the catalog
+
+Every app with a public listing gets an entry when the listing goes live. Choose its `appId` once; it never changes, even if the product is renamed. These shipped apps are missing, and each waits on the item named:
+
+| App                | Waits on                                               | Entry when ready                                                                             |
+| ------------------ | ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| Hub Display Switch | Its Microsoft Store name reserved and the listing live | Store product ID in `productIds`, with `appId`, Windows link and `iconUrl` in `appOverrides` |
+| WSL Monitor        | Its Microsoft Store name reserved and the listing live | Store product ID in `productIds`, with `appId`, Windows link and `iconUrl` in `appOverrides` |
+| PhoneLock          | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
+| SonarBridge        | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
+| Game's Up          | A public product page, if it gets one                  | `externalApps` entry with the page as destination and Web link                               |
+
+Every new entry also needs its app repo's 256 px icon at `assets/generated/icon-256.png` for its `iconUrl`, and a place in `appOrder`. Internal and client-specific apps are not listed.
 
 ## Versioning
 

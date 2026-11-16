@@ -8,7 +8,7 @@ Publish the current `main` as a tagged version that apps can pin.
 Invoking this skill authorises its own bump commit, tag and push. It still stops twice: for approval of the notes, and on a dirty tree.
 
 1. **Check the tree.** `git status` is clean and `git fetch` shows `HEAD` equal to `origin/main`. Stop and report if not; never commit unrelated work with the release.
-2. **Check a release is needed.** Read the changes since the last tag (`git log $(git describe --tags --abbrev=0)..HEAD`). If only `ids.json`, `Assets/PromotedApps/` or docs changed, stop: the catalog reaches shipped apps at runtime, so there is nothing to release (README, "Versioning").
+2. **Check a release is needed.** Read the changes since the last tag (`git log $(git describe --tags --abbrev=0)..HEAD`). If only `ids.json`, `Assets/PromotedApps/`, docs, `scripts/` or `.github/` changed, stop: the catalog reaches shipped apps at runtime and repo tooling never reaches them, so there is nothing to release (README, "Versioning").
 3. **Run the gate.** `npm run validate` passes. CI on `main` is green for `HEAD` (`gh run list --branch main --limit 5`).
 4. **Choose the version.** Apply SemVer as the README's "Versioning" section defines it: a major for anything that needs an edit in a consuming app, a minor for new page or `catalog.ts` behaviour that needs none, a patch for fixes only.
 5. **Draft the notes and stop for approval.** Write the proposed `release-notes/<version>.md` content in the reply: bullets only, no heading and no disclosure line, written for the developers of the consuming apps (what their page now does, and every edit a consumer must make). Wait for Ryan to approve or edit it. Change no files before that.
