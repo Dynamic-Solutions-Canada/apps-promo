@@ -50,8 +50,8 @@ Little Launcher's catalog description covers Windows and Linux AppImage. Keep th
 ## Updating the promoted apps
 
 1. Add/remove Store product IDs in `ids.json` and add their stable `appId` and platform `links` under `appOverrides` (optionally set a `blurbOverrides` entry to replace the auto-extracted first line of the Store description). Add web apps under `externalApps`, including a destination and a repository-owned icon URL.
-2. Run `.\refresh.ps1`: it queries the Store's StoreEdgeFD endpoint and regenerates `Assets/PromotedApps/apps.json` plus the icon files.
-3. Review, commit, and push the diff. Existing app releases receive the update the next time their promo page opens; bump the submodule only when shared page code changes.
+2. Run `npm run catalog:refresh` (or `.\refresh.ps1`) in Windows PowerShell: it queries the Store's StoreEdgeFD endpoint and regenerates `Assets/PromotedApps/apps.json` plus the icon files.
+3. Run `npm run validate`, which checks that `ids.json`, the manifest and the icons still agree. Then review, commit, and push the diff. Existing app releases receive the update the next time their promo page opens; bump the submodule only when shared page code changes.
 
 `refresh.ps1` is the only thing that talks to the Store backend. The runtime only reads the committed GitHub manifest and its icons, so Store endpoint changes cannot break shipped apps.
 

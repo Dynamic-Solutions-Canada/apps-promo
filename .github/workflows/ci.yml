@@ -1,0 +1,39 @@
+name: CI
+
+# The gate for every push to main and every pull request (CI-1): the same `npm run validate`
+# a developer runs. Node comes from .nvmrc (CI-6). The WinUI page has no host here, so its
+# XAML and C# are compiled by the consuming apps' CI, not by this workflow.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    # Install plus prettier, the catalog check and the tests take about a minute.
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run the gate
+        run: npm run validate

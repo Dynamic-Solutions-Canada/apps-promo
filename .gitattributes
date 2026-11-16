@@ -1,0 +1,4 @@
+* text=auto eol=lf
+
+# Icons are binary; git should not diff or normalise them.
+*.png binary

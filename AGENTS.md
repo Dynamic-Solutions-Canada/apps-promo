@@ -19,6 +19,7 @@ The repo owns the catalog data, the script that regenerates it, the WinUI page a
 | WinUI page text | `Views/PromoLocalization.cs` |
 | Shared-items import for WinUI apps | `PromotedApps.projitems` |
 | Web and Android types, URL and validation | `catalog.ts`, `catalog.test.ts` |
+| Repo checks and the test runner | `scripts/` |
 
 ## Conventions and gotchas
 
@@ -33,8 +34,13 @@ The repo owns the catalog data, the script that regenerates it, the WinUI page a
 
 | Command | Proves | Does not prove |
 | --- | --- | --- |
-| `node --test catalog.test.ts` | `parseCatalog` accepts the bundled catalog with stable ids and safe links | That the WinUI page compiles |
-| `pwsh ./refresh.ps1` (Windows, maintainer only) | Regenerates `Assets/PromotedApps/` from live Store listings | Nothing by itself; review the diff before committing |
+| `npm run validate` | The whole gate: `format:check`, `check:catalog` and `test`. CI runs the same command | That the WinUI page compiles |
+| `npm test` | Every `*.test.ts` and `*.test.mjs` in the repo passes, found by `scripts/run-tests.mjs` | That the WinUI page compiles |
+| `npm run check:catalog` | `ids.json`, the generated manifest and the icons agree, so a refresh will not drop an edit | That the Store listings are current |
+| `npm run format` | Rewrites files with Prettier (`format:check` only reports) | C# and XAML formatting; nothing here checks those |
+| `npm run catalog:refresh` (Windows PowerShell, maintainer only) | Regenerates `Assets/PromotedApps/` from live Store listings by running `refresh.ps1` | Nothing by itself; review the diff before committing |
+
+`catalog:refresh` is never part of `validate` or CI: it calls the Store backend and rewrites the public catalog.
 
 The WinUI page has no host in this repo. XAML and C# changes are checked by building a consuming app against this working tree, never by building a real app checkout.
 

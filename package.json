@@ -1,0 +1,23 @@
+{
+  "name": "apps-promo",
+  "private": true,
+  "type": "module",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "engines": {
+    "node": "24.22.1",
+    "npm": "11.19.1"
+  },
+  "packageManager": "npm@11.19.1",
+  "scripts": {
+    "test": "node scripts/run-tests.mjs",
+    "check:catalog": "node --import tsx scripts/check-catalog.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "validate": "npm run format:check && npm run check:catalog && npm test",
+    "catalog:refresh": "powershell -NoProfile -File refresh.ps1"
+  },
+  "devDependencies": {
+    "prettier": "3.10.1",
+    "tsx": "4.23.15"
+  }
+}
