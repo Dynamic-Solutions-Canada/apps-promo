@@ -3,3 +3,6 @@
 
 # Format with Prettier
 5ae017829bf71257ee47c65ca3f35a572f7a77d8
+
+# Add braces to the promo page code (IDE0011)
+c8d9672202674e4fa428a5995a414846a3f50a74
