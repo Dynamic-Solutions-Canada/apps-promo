@@ -10,16 +10,16 @@ This repo follows the shared standards at https://github.com/Dynamic-Solutions-C
 
 The repo owns the catalog data, the script that regenerates it, the WinUI page and its localization, and `catalog.ts` for web consumers. It does not own where the page sits in an app, or any app's store listing.
 
-| Area | Files |
-| --- | --- |
-| Catalog source (hand-edited) | `ids.json` |
-| Generated catalog and icons (public, fetched at runtime) | `Assets/PromotedApps/` |
-| Catalog generator, the only Store client | `refresh.ps1` |
-| WinUI page | `Views/PromotedAppsPage.xaml`, `Views/PromotedAppsPage.xaml.cs` |
-| WinUI page text | `Views/PromoLocalization.cs` |
-| Shared-items import for WinUI apps | `PromotedApps.projitems` |
-| Web and Android types, URL and validation | `catalog.ts`, `catalog.test.ts` |
-| Repo checks and the test runner | `scripts/` |
+| Area                                                     | Files                                                           |
+| -------------------------------------------------------- | --------------------------------------------------------------- |
+| Catalog source (hand-edited)                             | `ids.json`                                                      |
+| Generated catalog and icons (public, fetched at runtime) | `Assets/PromotedApps/`                                          |
+| Catalog generator, the only Store client                 | `refresh.ps1`                                                   |
+| WinUI page                                               | `Views/PromotedAppsPage.xaml`, `Views/PromotedAppsPage.xaml.cs` |
+| WinUI page text                                          | `Views/PromoLocalization.cs`                                    |
+| Shared-items import for WinUI apps                       | `PromotedApps.projitems`                                        |
+| Web and Android types, URL and validation                | `catalog.ts`, `catalog.test.ts`                                 |
+| Repo checks and the test runner                          | `scripts/`                                                      |
 
 ## Conventions and gotchas
 
@@ -32,13 +32,13 @@ The repo owns the catalog data, the script that regenerates it, the WinUI page a
 
 ## Commands
 
-| Command | Proves | Does not prove |
-| --- | --- | --- |
-| `npm run validate` | The whole gate: `format:check`, `check:catalog` and `test`. CI runs the same command | That the WinUI page compiles |
-| `npm test` | Every `*.test.ts` and `*.test.mjs` in the repo passes, found by `scripts/run-tests.mjs` | That the WinUI page compiles |
-| `npm run check:catalog` | `ids.json`, the generated manifest and the icons agree, so a refresh will not drop an edit | That the Store listings are current |
-| `npm run format` | Rewrites files with Prettier (`format:check` only reports) | C# and XAML formatting; nothing here checks those |
-| `npm run catalog:refresh` (Windows PowerShell, maintainer only) | Regenerates `Assets/PromotedApps/` from live Store listings by running `refresh.ps1` | Nothing by itself; review the diff before committing |
+| Command                                                         | Proves                                                                                     | Does not prove                                       |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| `npm run validate`                                              | The whole gate: `format:check`, `check:catalog` and `test`. CI runs the same command       | That the WinUI page compiles                         |
+| `npm test`                                                      | Every `*.test.ts` and `*.test.mjs` in the repo passes, found by `scripts/run-tests.mjs`    | That the WinUI page compiles                         |
+| `npm run check:catalog`                                         | `ids.json`, the generated manifest and the icons agree, so a refresh will not drop an edit | That the Store listings are current                  |
+| `npm run format`                                                | Rewrites files with Prettier (`format:check` only reports)                                 | C# and XAML formatting; nothing here checks those    |
+| `npm run catalog:refresh` (Windows PowerShell, maintainer only) | Regenerates `Assets/PromotedApps/` from live Store listings by running `refresh.ps1`       | Nothing by itself; review the diff before committing |
 
 `catalog:refresh` is never part of `validate` or CI: it calls the Store backend and rewrites the public catalog.
 
@@ -46,15 +46,15 @@ The WinUI page has no host in this repo. XAML and C# changes are checked by buil
 
 ## Guidance map
 
-| Guide, doc, or skill | Read or use when | Governs |
-| --- | --- | --- |
-| `README.md` | Consuming the page or catalog, or updating the promoted apps | Consumer setup, localization hook, catalog update steps, permanent URLs |
-| `LICENSE` | Adding files or changing the copyright line | Licence and holder; the README's License section repeats the holder |
+| Guide, doc, or skill | Read or use when                                             | Governs                                                                 |
+| -------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `README.md`          | Consuming the page or catalog, or updating the promoted apps | Consumer setup, localization hook, catalog update steps, permanent URLs |
+| `LICENSE`            | Adding files or changing the copyright line                  | Licence and holder; the README's License section repeats the holder     |
 
 ## Keeping docs current
 
-| What changed | Update |
-| --- | --- |
-| A permanent path, name or URL | This file's "Permanent names" and the README's "Permanent URLs" |
-| How consumers import or configure the page | README "Consuming" and "Page language" |
-| A command | The Commands table above |
+| What changed                               | Update                                                          |
+| ------------------------------------------ | --------------------------------------------------------------- |
+| A permanent path, name or URL              | This file's "Permanent names" and the README's "Permanent URLs" |
+| How consumers import or configure the page | README "Consuming" and "Page language"                          |
+| A command                                  | The Commands table above                                        |

@@ -13,11 +13,17 @@ export interface CatalogApp {
   links: AppLink[]
 }
 
-export const CATALOG_BASE_URL = 'https://raw.githubusercontent.com/Dynamic-Solutions-Canada/apps-promo/main/Assets/PromotedApps/'
+export const CATALOG_BASE_URL =
+  'https://raw.githubusercontent.com/Dynamic-Solutions-Canada/apps-promo/main/Assets/PromotedApps/'
 
 /** Validate untrusted remote or cached data before displaying it or following links. */
 export function parseCatalog(value: unknown): CatalogApp[] {
-  if (!value || typeof value !== 'object' || !('apps' in value) || !Array.isArray(value.apps)) {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    !('apps' in value) ||
+    !Array.isArray(value.apps)
+  ) {
     throw new Error('Invalid app catalog')
   }
 
@@ -26,26 +32,44 @@ export function parseCatalog(value: unknown): CatalogApp[] {
     if (!app || typeof app !== 'object') throw new Error('Invalid catalog app')
     const entry = app as Record<string, unknown>
     for (const key of ['appId', 'name', 'blurb', 'icon']) {
-      if (typeof entry[key] !== 'string' || !entry[key]) throw new Error(`Invalid ${key}`)
+      if (typeof entry[key] !== 'string' || !entry[key])
+        throw new Error(`Invalid ${key}`)
     }
     const { appId, name, blurb, icon } = entry as Record<string, string>
-    if (!appId || !name || !blurb || !icon || !/^[\w-]+\.png$/.test(icon) || ids.has(appId)) {
+    if (
+      !appId ||
+      !name ||
+      !blurb ||
+      !icon ||
+      !/^[\w-]+\.png$/.test(icon) ||
+      ids.has(appId)
+    ) {
       throw new Error('Invalid app identity or icon')
     }
     ids.add(appId)
-    if (!Array.isArray(entry.links) || entry.links.length === 0) throw new Error('Missing app links')
+    if (!Array.isArray(entry.links) || entry.links.length === 0)
+      throw new Error('Missing app links')
 
     const links = entry.links.map((link: unknown): AppLink => {
       if (!link || typeof link !== 'object') throw new Error('Invalid app link')
       const fields = link as Record<string, unknown>
-      if (fields.platform !== 'Android' && fields.platform !== 'Windows' && fields.platform !== 'Web') {
+      if (
+        fields.platform !== 'Android' &&
+        fields.platform !== 'Windows' &&
+        fields.platform !== 'Web'
+      ) {
         throw new Error('Invalid app platform')
       }
-      if (typeof fields.url !== 'string' || typeof fields.label !== 'string' || !fields.label) {
+      if (
+        typeof fields.url !== 'string' ||
+        typeof fields.label !== 'string' ||
+        !fields.label
+      ) {
         throw new Error('Invalid app destination')
       }
       const url = new URL(fields.url)
-      if (url.protocol !== 'https:' || url.username || url.password) throw new Error('Unsafe app destination')
+      if (url.protocol !== 'https:' || url.username || url.password)
+        throw new Error('Unsafe app destination')
       return { platform: fields.platform, url: url.href, label: fields.label }
     })
 
