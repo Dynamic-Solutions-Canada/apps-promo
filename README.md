@@ -40,6 +40,10 @@ The page uses these keys from it:
 
 It also uses `CaptionTextBlockStyle` and `TextFillColorSecondaryBrush`, which every WinUI app has through `XamlControlsResources`. An app that defines these keys itself works too, but WinUI looks them up only when the page opens: a host without them builds, then fails to open the page. Stay on promo v1.x until the app merges the kit styles.
 
+## Narrow widths
+
+From v2.1.0 each card adapts to its own width. The icon, the app's name and description, and the button sit in a row while the text keeps at least 240 epx; below that, the button moves under the text. The switch depends on the card, not the window, because the space a card gets also depends on the host's navigation pane and on how long the button's label is in the current language. With the kit's padding and an English label, a card stacks below roughly 450 epx, which is a page narrower than about 520 epx. The layout is `TrailingActionPanel` in `Views/`, and the 240 is `MinContentWidth` in the page XAML.
+
 ## Page language (optional)
 
 The WinUI page bundles its own UI text (title, subtitle, and the known action labels "View in Store", "Visit website", "Open") in `Views/PromoLocalization.cs`, in the same nine locale identities the apps use: `en-US`, `en-CA`, `es-ES`, `fr-FR`, `fr-CA`, `de-DE`, `zh-CN`, `pt-BR`, `ja-JP`. Canadian locales reuse the en-US / fr-FR wording; anything unsupported (including Traditional Chinese) falls back to English. App names and blurbs come from the manifest and are not translated.

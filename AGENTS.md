@@ -10,17 +10,17 @@ This repo follows the shared standards at https://github.com/Dynamic-Solutions-C
 
 The repo owns the catalog data, the script that regenerates it, the WinUI page and its localization, and `catalog.ts` for web consumers. It does not own where the page sits in an app, or any app's store listing.
 
-| Area                                                     | Files                                                           |
-| -------------------------------------------------------- | --------------------------------------------------------------- |
-| Catalog source (hand-edited)                             | `ids.json`                                                      |
-| Generated catalog and icons (public, fetched at runtime) | `Assets/PromotedApps/`                                          |
-| Catalog generator, the only Store client                 | `scripts/refresh-catalog.ps1`                                   |
-| WinUI page                                               | `Views/PromotedAppsPage.xaml`, `Views/PromotedAppsPage.xaml.cs` |
-| WinUI page text                                          | `Views/PromoLocalization.cs`                                    |
-| Shared-items import for WinUI apps                       | `PromotedApps.projitems`                                        |
-| Compile and format host for the page (never shipped)     | `Views/CompileCheck/`                                           |
-| Web and Android types, URL and validation                | `catalog.ts`, `catalog.test.ts`                                 |
-| Repo checks and the test runner                          | `scripts/`                                                      |
+| Area                                                     | Files                                                                                           |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Catalog source (hand-edited)                             | `ids.json`                                                                                      |
+| Generated catalog and icons (public, fetched at runtime) | `Assets/PromotedApps/`                                                                          |
+| Catalog generator, the only Store client                 | `scripts/refresh-catalog.ps1`                                                                   |
+| WinUI page                                               | `Views/PromotedAppsPage.xaml`, `Views/PromotedAppsPage.xaml.cs`, `Views/TrailingActionPanel.cs` |
+| WinUI page text                                          | `Views/PromoLocalization.cs`                                                                    |
+| Shared-items import for WinUI apps                       | `PromotedApps.projitems`                                                                        |
+| Compile and format host for the page (never shipped)     | `Views/CompileCheck/`                                                                           |
+| Web and Android types, URL and validation                | `catalog.ts`, `catalog.test.ts`                                                                 |
+| Repo checks and the test runner                          | `scripts/`                                                                                      |
 
 ## Conventions and gotchas
 
