@@ -17,11 +17,10 @@ updates:
       nuget:
         patterns: ['*']
     ignore:
-      # The compile check mirrors the kit's Windows App SDK 1.8 line, which every consuming app
-      # ships with (Microsoft.WindowsAppRuntime.1.8); it moves when the kit does.
+      # The compile check builds the page against the exact Windows App SDK version the kit pins,
+      # which is what every consuming app compiles with. It moves by hand when the kit's pin
+      # moves, patches included, so it never checks against a version no app uses.
       - dependency-name: Microsoft.WindowsAppSDK
-        update-types:
-          ['version-update:semver-major', 'version-update:semver-minor']
 
   - package-ecosystem: github-actions
     directory: '/'
