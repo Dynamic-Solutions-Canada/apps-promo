@@ -1,8 +1,9 @@
 name: CI
 
 # The gate for every push to main and every pull request (CI-1): the same `npm run validate`
-# a developer runs. Node comes from .nvmrc (CI-6). The WinUI page has no host here, so its
-# XAML and C# are compiled by the consuming apps' CI, not by this workflow.
+# a developer runs, with Node from .nvmrc and .NET from global.json (CI-6). The page's XAML and C#
+# compile on Windows through Views/CompileCheck only when files that affect them change (CI-3),
+# because Windows runner minutes cost more.
 
 on:
   push:
@@ -20,8 +21,8 @@ jobs:
   validate:
     name: Validate
     runs-on: ubuntu-latest
-    # Install plus prettier, the catalog check and the tests take about a minute.
-    timeout-minutes: 10
+    # npm install, a cold Windows App SDK restore for dotnet format, and the checks.
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -32,8 +33,63 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
+      - name: Set up .NET from global.json
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
       - name: Install dependencies
         run: npm ci
 
       - name: Run the gate
         run: npm run validate
+
+  changes:
+    name: Detect page changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # The path filter lists a pull request's files through the API.
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      page: ${{ steps.filter.outputs.page }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Filter paths
+        id: filter
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
+            page:
+              - 'Views/**'
+              - 'PromotedApps.projitems'
+              - 'global.json'
+              - '.editorconfig'
+              - '.github/workflows/ci.yml'
+
+  windows-compile:
+    name: Compile (${{ matrix.platform }})
+    needs: changes
+    if: needs.changes.outputs.page == 'true'
+    runs-on: windows-2025
+    # A cold restore of the Windows App SDK plus one small app compile; well under this cap.
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [x64, ARM64]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up .NET from global.json
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      # Release, so warnings are errors, as in apps on the kit (D-091).
+      - name: Compile the page in its compile-check host
+        run: dotnet build Views/CompileCheck/PromoCompileCheck.csproj --configuration Release -p:Platform=${{ matrix.platform }}

@@ -21,8 +21,8 @@ jobs:
   validate:
     name: Validate
     runs-on: ubuntu-latest
-    # Install plus prettier, the catalog check and the tests take about a minute.
-    timeout-minutes: 10
+    # npm install, a cold Windows App SDK restore for dotnet format, and the checks.
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -33,15 +33,42 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
+      - name: Set up .NET from global.json
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
       - name: Install dependencies
         run: npm ci
 
       - name: Run the gate
         run: npm run validate
 
+  # Every release compiles the page, whatever changed (CI-4).
+  windows-compile:
+    name: Compile (${{ matrix.platform }})
+    runs-on: windows-2025
+    # A cold restore of the Windows App SDK plus one small app compile; well under this cap.
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [x64, ARM64]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up .NET from global.json
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Compile the page in its compile-check host
+        run: dotnet build Views/CompileCheck/PromoCompileCheck.csproj --configuration Release -p:Platform=${{ matrix.platform }}
+
   release:
     name: Create GitHub Release
-    needs: validate
+    needs: [validate, windows-compile]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

@@ -140,7 +140,7 @@ public static class PromoLocalization
         ["es-ES"] = new()
         {
             ["Our other apps"] = "Nuestras otras aplicaciones",
-            ["More from Dynamic Solutions Canada on the Microsoft Store."] = "Más de Dynamic Solutions Canada en Microsoft Store.",
+            ["More apps from Dynamic Solutions (CA)."] = "Más aplicaciones de Dynamic Solutions (CA).",
             ["View in Store"] = "Ver en Store",
             ["Visit website"] = "Visitar sitio web",
             ["Open"] = "Abrir",
@@ -148,7 +148,7 @@ public static class PromoLocalization
         ["fr-FR"] = new()
         {
             ["Our other apps"] = "Nos autres applications",
-            ["More from Dynamic Solutions Canada on the Microsoft Store."] = "Plus d’applications de Dynamic Solutions Canada sur le Microsoft Store.",
+            ["More apps from Dynamic Solutions (CA)."] = "Plus d’applications de Dynamic Solutions (CA).",
             ["View in Store"] = "Voir dans le Store",
             ["Visit website"] = "Visiter le site web",
             ["Open"] = "Ouvrir",
@@ -156,7 +156,7 @@ public static class PromoLocalization
         ["de-DE"] = new()
         {
             ["Our other apps"] = "Unsere anderen Apps",
-            ["More from Dynamic Solutions Canada on the Microsoft Store."] = "Mehr von Dynamic Solutions Canada im Microsoft Store.",
+            ["More apps from Dynamic Solutions (CA)."] = "Weitere Apps von Dynamic Solutions (CA).",
             ["View in Store"] = "Im Store ansehen",
             ["Visit website"] = "Website besuchen",
             ["Open"] = "Öffnen",
@@ -164,7 +164,7 @@ public static class PromoLocalization
         ["zh-CN"] = new()
         {
             ["Our other apps"] = "我们的其他应用",
-            ["More from Dynamic Solutions Canada on the Microsoft Store."] = "在 Microsoft Store 中查看 Dynamic Solutions Canada 的更多应用。",
+            ["More apps from Dynamic Solutions (CA)."] = "Dynamic Solutions (CA) 的更多应用。",
             ["View in Store"] = "在应用商店中查看",
             ["Visit website"] = "访问网站",
             ["Open"] = "打开",
@@ -172,7 +172,7 @@ public static class PromoLocalization
         ["pt-BR"] = new()
         {
             ["Our other apps"] = "Nossos outros aplicativos",
-            ["More from Dynamic Solutions Canada on the Microsoft Store."] = "Mais da Dynamic Solutions Canada na Microsoft Store.",
+            ["More apps from Dynamic Solutions (CA)."] = "Mais aplicativos da Dynamic Solutions (CA).",
             ["View in Store"] = "Ver na Store",
             ["Visit website"] = "Visitar site",
             ["Open"] = "Abrir",
@@ -180,7 +180,7 @@ public static class PromoLocalization
         ["ja-JP"] = new()
         {
             ["Our other apps"] = "その他のアプリ",
-            ["More from Dynamic Solutions Canada on the Microsoft Store."] = "Microsoft Store で Dynamic Solutions Canada のその他のアプリをご覧ください。",
+            ["More apps from Dynamic Solutions (CA)."] = "Dynamic Solutions (CA) のその他のアプリ。",
             ["View in Store"] = "ストアで表示",
             ["Visit website"] = "Web サイトにアクセス",
             ["Open"] = "開く",

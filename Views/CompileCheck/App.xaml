@@ -1,0 +1,16 @@
+<!--
+  A host for the compile check. A real host also merges winui-app-kit's Styles.xaml here; StaticResource
+  keys resolve when the page loads, not at compile time, so scripts/xaml-keys.test.ts checks them instead.
+-->
+<Application
+    x:Class="TechnicallyReal.Promo.CompileCheck.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

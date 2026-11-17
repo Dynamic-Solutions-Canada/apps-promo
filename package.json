@@ -12,8 +12,8 @@
   "scripts": {
     "test": "node scripts/run-tests.mjs",
     "check:catalog": "node --import tsx scripts/check-catalog.ts",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write . && scripts/dotnet format Views/CompileCheck/PromoCompileCheck.csproj",
+    "format:check": "prettier --check . && scripts/dotnet format Views/CompileCheck/PromoCompileCheck.csproj --verify-no-changes",
     "validate": "npm run format:check && npm run check:catalog && npm test",
     "catalog:refresh": "powershell -NoProfile -File scripts/refresh-catalog.ps1"
   },

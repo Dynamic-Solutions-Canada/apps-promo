@@ -18,6 +18,7 @@ The repo owns the catalog data, the script that regenerates it, the WinUI page a
 | WinUI page                                               | `Views/PromotedAppsPage.xaml`, `Views/PromotedAppsPage.xaml.cs` |
 | WinUI page text                                          | `Views/PromoLocalization.cs`                                    |
 | Shared-items import for WinUI apps                       | `PromotedApps.projitems`                                        |
+| Compile and format host for the page (never shipped)     | `Views/CompileCheck/`                                           |
 | Web and Android types, URL and validation                | `catalog.ts`, `catalog.test.ts`                                 |
 | Repo checks and the test runner                          | `scripts/`                                                      |
 
@@ -28,21 +29,23 @@ The repo owns the catalog data, the script that regenerates it, the WinUI page a
 - **Only `refresh-catalog.ps1` talks to the Store backend.** The page and `catalog.ts` read only the committed public manifest and its icons, so a Store endpoint change cannot break shipped apps. Do not run `refresh-catalog.ps1` unless the maintainer asks: it rewrites the public catalog.
 - **Catalog edits go in `ids.json` and the generated manifest together**, so a later `refresh-catalog.ps1` run preserves them.
 - **Page strings are keyed by their English text** in `Views/PromoLocalization.cs`. A new string is added to every locale table there. The page never references a consumer's localization classes.
+- **The page takes its styles from the host.** It uses only the keys in the README's "Host requirements" table, from winui-app-kit's `Styles.xaml`, and writes no padding, radius or font size inline (UI-3). A new key is a major version, because hosts without it fail when the page opens; `scripts/xaml-keys.test.ts` keeps the table and the page in step.
+- **Keep the page's element names and root.** The ScrollViewer > StackPanel root and `AppList`, `TitleText` and `SubtitleText` are reached by translation adapters in apps on older pins, until each app deletes its adapter (PROMO-7).
 - **`refresh-catalog.ps1` stays ASCII-only**, because Windows PowerShell 5.1 reads a BOM-less script as the system code page.
 
 ## Commands
 
-| Command                                                         | Proves                                                                                       | Does not prove                                       |
-| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `npm run validate`                                              | The whole gate: `format:check`, `check:catalog` and `test`. CI runs the same command         | That the WinUI page compiles                         |
-| `npm test`                                                      | Every `*.test.ts` and `*.test.mjs` in the repo passes, found by `scripts/run-tests.mjs`      | That the WinUI page compiles                         |
-| `npm run check:catalog`                                         | `ids.json`, the generated manifest and the icons agree, so a refresh will not drop an edit   | That the Store listings are current                  |
-| `npm run format`                                                | Rewrites files with Prettier (`format:check` only reports)                                   | C# and XAML formatting; nothing here checks those    |
-| `npm run catalog:refresh` (Windows PowerShell, maintainer only) | Regenerates `Assets/PromotedApps/` from live Store listings by running `refresh-catalog.ps1` | Nothing by itself; review the diff before committing |
+| Command                                                         | Proves                                                                                                                                                            | Does not prove                                       |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `npm run validate`                                              | The whole gate: `format:check`, `check:catalog` and `test`. CI runs the same command, and compiles the page on Windows when it changes                            | That the WinUI page compiles; that needs Windows     |
+| `npm test`                                                      | Every `*.test.ts` and `*.test.mjs` in the repo passes, found by `scripts/run-tests.mjs`                                                                           | That the WinUI page compiles                         |
+| `npm run check:catalog`                                         | `ids.json`, the generated manifest and the icons agree, so a refresh will not drop an edit                                                                        | That the Store listings are current                  |
+| `npm run format`                                                | Rewrites files with Prettier, and the page's C# with `dotnet format` through `scripts/dotnet` (Docker when no .NET SDK is installed). `format:check` only reports | XAML formatting; nothing checks that                 |
+| `npm run catalog:refresh` (Windows PowerShell, maintainer only) | Regenerates `Assets/PromotedApps/` from live Store listings by running `refresh-catalog.ps1`                                                                      | Nothing by itself; review the diff before committing |
 
 `catalog:refresh` is never part of `validate` or CI: it calls the Store backend and rewrites the public catalog.
 
-The WinUI page has no host in this repo. XAML and C# changes are checked by building a consuming app against this working tree, never by building a real app checkout.
+The page's only host here is `Views/CompileCheck/`, which CI builds on Windows. To see the page in an app, build a copy of a consuming app under `.artifacts/` with this working tree as its `external/promo`; never build from, or write to, a real app checkout. How it looks in light, dark and high contrast can only be checked in an installed app.
 
 ## Release
 

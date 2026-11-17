@@ -22,6 +22,24 @@ Add a nav item (e.g. in `NavigationView.FooterMenuItems`) that navigates to `Tec
 
 CI note: checkouts need submodules, e.g. `actions/checkout` with `submodules: true`.
 
+## Host requirements
+
+From v2.0.0 the page uses the family page standard (UI-3) and takes its styles from the host app; it carries no copy of them. Merge winui-app-kit's shared styles, from kit tag v1.2.0 or later, in the app's `App.xaml` after `XamlControlsResources` (see "Shared XAML" in the kit README):
+
+```xml
+<ResourceDictionary Source="ms-appx:///WinUIAppKit/Styles.xaml" />
+```
+
+The page uses these keys from it:
+
+| Key                | Use on the page                                    |
+| ------------------ | -------------------------------------------------- |
+| `PageContentStyle` | The page's content: padding, spacing and max width |
+| `PageTitleStyle`   | "Our other apps"                                   |
+| `CardBorderStyle`  | Each app's card                                    |
+
+It also uses `CaptionTextBlockStyle` and `TextFillColorSecondaryBrush`, which every WinUI app has through `XamlControlsResources`. An app that defines these keys itself works too, but WinUI looks them up only when the page opens: a host without them builds, then fails to open the page. Stay on promo v1.x until the app merges the kit styles.
+
 ## Page language (optional)
 
 The WinUI page bundles its own UI text (title, subtitle, and the known action labels "View in Store", "Visit website", "Open") in `Views/PromoLocalization.cs`, in the same nine locale identities the apps use: `en-US`, `en-CA`, `es-ES`, `fr-FR`, `fr-CA`, `de-DE`, `zh-CN`, `pt-BR`, `ja-JP`. Canadian locales reuse the en-US / fr-FR wording; anything unsupported (including Traditional Chinese) falls back to English. App names and blurbs come from the manifest and are not translated.

@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Compile and format check for the shared page (Views/). Nothing in this repo hosts the page, so this
+    minimal app imports PromotedApps.projitems the way a consuming app does. It builds in CI on Windows
+    and is the project `npm run format` hands to dotnet format. It is never run or shipped.
+
+    The settings mirror winui-app-kit v1.2.0 build/WinUIAppKit.props and the Windows App SDK version in
+    its build/WinUIAppKit.Packages.props, so warnings here are the warnings apps on the kit see.
+    Update them together when the apps move to a newer kit tag.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.22000.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19045.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion>$(SupportedOSPlatformVersion)</TargetPlatformMinVersion>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <RootNamespace>TechnicallyReal.Promo.CompileCheck</RootNamespace>
+    <Platforms>x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>10.0</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <!-- A plain "dotnet build" passes no Platform; pick the OS architecture, as the kit does. -->
+  <PropertyGroup Condition="'$(Platform)' == '' Or '$(Platform)' == 'AnyCPU'">
+    <Platform Condition="'$(PROCESSOR_ARCHITECTURE)' == 'ARM64'">ARM64</Platform>
+    <Platform Condition="'$(PROCESSOR_ARCHITECTURE)' != 'ARM64'">x64</Platform>
+  </PropertyGroup>
+
+  <!-- Release and CI treat warnings as errors, as apps on the kit do (D-091). -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release' Or '$(CI)' == 'true'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260209005" />
+  </ItemGroup>
+
+  <Import Project="..\..\PromotedApps.projitems" Label="Shared" />
+</Project>

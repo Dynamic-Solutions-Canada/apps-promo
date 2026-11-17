@@ -92,7 +92,7 @@ public sealed partial class PromotedAppsPage : Page
         // Picks the right CJK font fallback (Japanese vs Simplified Chinese glyphs).
         Language = PromoLocalization.CurrentWording;
         TitleText.Text = PromoLocalization.Get("Our other apps");
-        SubtitleText.Text = PromoLocalization.Get("More from Dynamic Solutions Canada on the Microsoft Store.");
+        SubtitleText.Text = PromoLocalization.Get("More apps from Dynamic Solutions (CA).");
     }
 
     /// <summary>Loads the cached manifest, or the bundled one on a first offline visit.</summary>
