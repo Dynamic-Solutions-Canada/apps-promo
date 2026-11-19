@@ -150,7 +150,7 @@ if ($orderedApps.Count -ne $apps.Count) {
 
 $manifest = [ordered]@{
     generatedUtc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
-    publisher    = "Dynamic Solutions Canada"
+    publisher    = "Dynamic Solutions (CA)"
     apps         = $orderedApps
 }
 $json = $manifest | ConvertTo-Json -Depth 5
