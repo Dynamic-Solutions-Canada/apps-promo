@@ -11,7 +11,9 @@ $ErrorActionPreference = "Stop"
 # The catalog files live at the repo root, one level above this script.
 $root = Split-Path -Parent $PSScriptRoot
 $outDir = Join-Path $root "Assets\PromotedApps"
-$ids = Get-Content (Join-Path $root "ids.json") -Raw | ConvertFrom-Json
+# ids.json holds translated blurbs, so read it as UTF-8: Windows PowerShell 5.1 otherwise
+# reads a file without a BOM in the system code page and garbles every non-ASCII letter.
+$ids = Get-Content (Join-Path $root "ids.json") -Raw -Encoding UTF8 | ConvertFrom-Json
 
 New-Item -ItemType Directory -Force $outDir | Out-Null
 
@@ -69,6 +71,40 @@ function Save-Icon([string]$url, [string]$fileName, [string]$label) {
     Move-Item -Force $download $path
 }
 
+# The wording catalogs blurbs are translated into, in the order apps.json lists them.
+# Keep in step with TRANSLATED_WORDINGS in catalog.ts; scripts/wordings.test.ts compares them.
+$translatedWordings = "es-ES", "fr-FR", "de-DE", "zh-CN", "pt-BR", "ja-JP"
+
+# Return an app's translated blurbs from ids.json (blurbTranslations, keyed by appId) in
+# the fixed wording order. A new app has none until its English is known, which for a
+# Store product is only after this refresh, so a missing entry or wording is a warning,
+# not a failure: npm run check:catalog then fails until the translations are written.
+# The same holds when they were made from different English (a changed Store description).
+function Get-BlurbTranslations([string]$appId, [string]$englishBlurb) {
+    $blurbs = [ordered]@{}
+    $entry = $null
+    if ($ids.blurbTranslations) { $entry = $ids.blurbTranslations.$appId }
+    if (-not $entry) {
+        Write-Warning "No blurbTranslations entry for $appId. Translate its blurb before committing."
+        return $blurbs
+    }
+
+    if ($entry.source -ne $englishBlurb) {
+        Write-Warning "The $appId translations were made from different English. Retranslate them and update their source."
+    }
+
+    foreach ($wording in $translatedWordings) {
+        $text = $entry.$wording
+        if ($text) {
+            $blurbs[$wording] = $text
+        }
+        else {
+            Write-Warning "No $wording blurb for $appId in blurbTranslations."
+        }
+    }
+    return $blurbs
+}
+
 $apps = @()
 foreach ($id in $ids.productIds) {
     Write-Host "Fetching $id ..."
@@ -111,6 +147,7 @@ foreach ($id in $ids.productIds) {
         actionLabel       = "View in Store"
         name              = $name
         blurb             = $blurb
+        blurbs            = Get-BlurbTranslations $metadata.appId $blurb
         packageFamilyName = @($payload.PackageFamilyNames)[0]
         icon              = $iconFile
     }
@@ -129,6 +166,7 @@ foreach ($externalApp in @($ids.externalApps)) {
         actionLabel       = $externalApp.actionLabel
         name              = $externalApp.name
         blurb             = $externalApp.blurb
+        blurbs            = Get-BlurbTranslations $externalApp.appId $externalApp.blurb
         packageFamilyName = $null
         icon              = $externalApp.icon
     }
@@ -154,5 +192,9 @@ $manifest = [ordered]@{
     apps         = $orderedApps
 }
 $json = $manifest | ConvertTo-Json -Depth 5
-Set-Content -Path (Join-Path $outDir "apps.json") -Value $json -Encoding UTF8
+
+# UTF-8 without a BOM, as the committed file is: Set-Content -Encoding UTF8 adds a BOM in
+# Windows PowerShell 5.1.
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+[System.IO.File]::WriteAllText((Join-Path $outDir "apps.json"), $json + "`n", $utf8NoBom)
 Write-Host "Wrote $(Join-Path $outDir 'apps.json') ($($apps.Count) apps)."

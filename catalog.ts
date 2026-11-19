@@ -5,10 +5,33 @@ export interface AppLink {
   label: string
 }
 
+/**
+ * The wording catalogs the blurbs are translated into: the nine-locale set's seven catalogs
+ * less `en-US`, whose text is `blurb` itself. `en-CA` reads `en-US` and `fr-CA` reads `fr-FR`.
+ */
+export const TRANSLATED_WORDINGS = [
+  'es-ES',
+  'fr-FR',
+  'de-DE',
+  'zh-CN',
+  'pt-BR',
+  'ja-JP',
+] as const
+
+/** One of {@link TRANSLATED_WORDINGS}. */
+export type TranslatedWording = (typeof TRANSLATED_WORDINGS)[number]
+
 export interface CatalogApp {
   appId: string
   name: string
+  /** The English (`en-US`) description, and the fallback for every other wording. */
   blurb: string
+  /**
+   * Translated descriptions by wording catalog; a missing one falls back to {@link blurb}.
+   * `parseCatalog` always sets it. It is optional so callers that build entries themselves,
+   * written before v2.2.0, still type-check.
+   */
+  blurbs?: Partial<Record<TranslatedWording, string>>
   icon: string
   links: AppLink[]
 }
@@ -73,6 +96,86 @@ export function parseCatalog(value: unknown): CatalogApp[] {
       return { platform: fields.platform, url: url.href, label: fields.label }
     })
 
-    return { appId, name, blurb, icon, links }
+    return {
+      appId,
+      name,
+      blurb,
+      blurbs: parseBlurbs(entry.blurbs),
+      icon,
+      links,
+    }
   })
+}
+
+/**
+ * Keep only well-formed translations. A bad or missing translation shows the English blurb
+ * instead of rejecting the whole catalog, since the English is always valid by this point.
+ */
+function parseBlurbs(
+  value: unknown,
+): Partial<Record<TranslatedWording, string>> {
+  const blurbs: Partial<Record<TranslatedWording, string>> = {}
+  if (!value || typeof value !== 'object') {
+    return blurbs
+  }
+
+  const entries = value as Record<string, unknown>
+  for (const wording of TRANSLATED_WORDINGS) {
+    const text = entries[wording]
+    if (typeof text === 'string' && text) {
+      blurbs[wording] = text
+    }
+  }
+
+  return blurbs
+}
+
+/**
+ * Map a BCP-47 locale tag to the wording catalog the promo page uses for it, by language,
+ * as the WinUI page does: `fr-CA` reads `fr-FR`, `en-CA` reads `en-US`, and Chinese
+ * selects `zh-CN` only for Simplified script (a `Hant` script or a TW, HK or MO region
+ * never does).
+ *
+ * @returns The wording catalog, or `undefined` for English and unsupported languages.
+ */
+export function translatedWordingFor(
+  locale: string,
+): TranslatedWording | undefined {
+  const parts = locale.trim().replace(/_/g, '-').split('-')
+  const language = parts[0]?.toLowerCase()
+
+  if (language === 'zh') {
+    return isSimplifiedChinese(parts) ? 'zh-CN' : undefined
+  }
+
+  return TRANSLATED_WORDINGS.find(
+    (wording) => wording.slice(0, 2).toLowerCase() === language,
+  )
+}
+
+/** Whether a Chinese tag's script or region selects Simplified Chinese; no subtag means it does. */
+function isSimplifiedChinese(parts: string[]): boolean {
+  for (const part of parts.slice(1)) {
+    // A singleton starts an extension (-u-, -x-), which never names the script.
+    if (part.length === 1) {
+      break
+    }
+    if (part.length === 4) {
+      return part.toLowerCase() === 'hans'
+    }
+    if (['tw', 'hk', 'mo'].includes(part.toLowerCase())) {
+      return false
+    }
+  }
+
+  return true
+}
+
+/**
+ * The app's description in the given BCP-47 locale, or the English blurb when that
+ * language has no translation.
+ */
+export function blurbFor(app: CatalogApp, locale: string): string {
+  const wording = translatedWordingFor(locale)
+  return (wording && app.blurbs?.[wording]) || app.blurb
 }

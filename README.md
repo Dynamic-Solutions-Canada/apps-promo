@@ -46,7 +46,7 @@ From v2.1.0 each card adapts to its own width. The icon, the app's name and desc
 
 ## Page language (optional)
 
-The WinUI page bundles its own UI text (title, subtitle, and the known action labels "View in Store", "Visit website", "Open") in `Views/PromoLocalization.cs`, in the same nine locale identities the apps use: `en-US`, `en-CA`, `es-ES`, `fr-FR`, `fr-CA`, `de-DE`, `zh-CN`, `pt-BR`, `ja-JP`. Canadian locales reuse the en-US / fr-FR wording; anything unsupported (including Traditional Chinese) falls back to English. App names and blurbs come from the manifest and are not translated.
+The WinUI page bundles its own UI text (title, subtitle, and the known action labels "View in Store", "Visit website", "Open") in `Views/PromoLocalization.cs`, in the same nine locale identities the apps use: `en-US`, `en-CA`, `es-ES`, `fr-FR`, `fr-CA`, `de-DE`, `zh-CN`, `pt-BR`, `ja-JP`. Canadian locales reuse the en-US / fr-FR wording; anything unsupported (including Traditional Chinese) falls back to English. From v2.2.0 each app's description comes from the manifest in the same language (see "Translated descriptions"); app names are never translated.
 
 Apps that do nothing get Windows' preferred languages. Apps with their own language setting point the page at it once at startup and refresh it when the language changes:
 
@@ -61,6 +61,8 @@ The page never references a consumer's localization classes. When adding a strin
 
 `catalog.ts` exports the public manifest URL, types, and `parseCatalog` validation. Each entry has a stable `appId` for hiding the current product across platforms, and `links` containing a platform (`Android`, `Windows`, or `Web`), HTTPS URL, and action label. Use HTTPS Microsoft Store listings on Android, rather than the Windows-only `ms-windows-store:` scheme. Keep the original `destination`, `actionLabel`, and `packageFamilyName` fields for shipped WinUI consumers.
 
+Show each description with `blurbFor(app, locale)`, which takes the app's BCP-47 locale tag (`fr-CA`, for example), picks the translation the WinUI page would, and falls back to the English `blurb`. An app that translates blurbs itself, for example through `promo.*` message keys, can drop those keys.
+
 Import the bundled JSON and icons for the first offline visit. Refresh the public manifest when the page opens, without credentials, validate before storing it, and retain the last successful catalog if the network or validation fails. Cache new remote icons for offline use. Show platform labels on every app and hide the consuming product by `appId`, rather than comparing display names.
 
 The consumer's checkout and build context must include this submodule. Catalog metadata edits go in `ids.json` as well as the generated manifest so a later `refresh-catalog.ps1` run preserves them.
@@ -73,9 +75,32 @@ Little Launcher's catalog description covers Windows and Linux AppImage. Keep th
 
 1. Add/remove Store product IDs in `ids.json` and add their stable `appId` and platform `links` under `appOverrides` (optionally set a `blurbOverrides` entry to replace the auto-extracted first line of the Store description). Add web apps, and apps with no Microsoft Store listing, under `externalApps`, including a destination and a repository-owned icon URL. Give a Store product an `iconUrl` in its `appOverrides` entry once its 256 px icon exists (see "Icons").
 2. Run `npm run catalog:refresh` (or `.\scripts\refresh-catalog.ps1`) in Windows PowerShell: it queries the Store's StoreEdgeFD endpoint and regenerates `Assets/PromotedApps/apps.json` plus the icon files.
-3. Run `npm run validate`, which checks that `ids.json`, the manifest and the icons still agree. Then review, commit, and push the diff. Existing app releases receive the update the next time their promo page opens, so a catalog-only change needs no release and no pin bump (see "Versioning").
+3. Translate any new or changed English blurb (see "Translated descriptions"): add the app's `blurbTranslations` entry in `ids.json`, and the same six texts as its `blurbs` in the manifest. The refresh warns about an app with missing translations and writes the ones it has. A new Store product's English is known only after the refresh, so translate it then.
+4. Run `npm run validate`, which checks that `ids.json`, the manifest, the translations and the icons still agree. Then review, commit, and push the diff. Existing app releases receive the update the next time their promo page opens, so a catalog-only change needs no release and no pin bump (see "Versioning").
 
 `refresh-catalog.ps1` is the only thing that talks to the Store backend. The runtime only reads the committed GitHub manifest and its icons, so Store endpoint changes cannot break shipped apps.
+
+## Translated descriptions
+
+Every app's description is translated into the page's other six wording catalogs: `es-ES`, `fr-FR`, `de-DE`, `zh-CN`, `pt-BR` and `ja-JP`. `en-CA` reads the English and `fr-CA` reads `fr-FR`. The English stays in `blurb`, and the translations sit beside it in each app's `blurbs` in the manifest. They are written in `ids.json` under `blurbTranslations`, keyed by `appId`, and the refresh copies them across.
+
+Each `blurbTranslations` entry records, as `source`, the English it was translated from. `npm run check:catalog` fails when an app is missing a translation, when `ids.json` and the manifest disagree, or when an app's English no longer matches its `source`. So after changing an app's English (a `blurbOverrides` entry, an `externalApps` blurb, or a refreshed Store description), translate it again into all six and set `source` to the new English.
+
+## Languages
+
+The page and the descriptions are in English (United States and Canada), Spanish, French (France and Canada), German, Simplified Chinese, Brazilian Portuguese and Japanese. No translation has been reviewed by a native speaker yet (LOC-12):
+
+| Wording catalog | Page text              | App descriptions       |
+| --------------- | ---------------------- | ---------------------- |
+| `en-US`         | Source text            | Source text            |
+| `es-ES`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
+| `fr-FR`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
+| `de-DE`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
+| `zh-CN`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
+| `pt-BR`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
+| `ja-JP`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
+
+The PrintStream, Persistent and Repilot descriptions reuse Persistent's AI-drafted translations of the same English. The Little Launcher and ImmichDrive descriptions were translated new for this catalog. Update the table when a native speaker reviews a catalog.
 
 ## Icons
 
@@ -97,7 +122,7 @@ Every app with a public listing gets an entry when the listing goes live. Choose
 | SonarBridge        | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
 | Game's Up          | A public product page, if it gets one                  | `externalApps` entry with the page as destination and Web link                               |
 
-Every new entry also needs its app repo's 256 px icon at `assets/generated/icon-256.png` for its `iconUrl`, and a place in `appOrder`. Internal and client-specific apps are not listed.
+Every new entry also needs its app repo's 256 px icon at `assets/generated/icon-256.png` for its `iconUrl`, a place in `appOrder`, and its description in all six translated wording catalogs under `blurbTranslations`. Internal and client-specific apps are not listed.
 
 ## Versioning
 

@@ -222,6 +222,9 @@ public sealed partial class PromotedAppsPage : Page
             try { currentPfn = global::Windows.ApplicationModel.Package.Current.Id.FamilyName; }
             catch { /* unpackaged dev run - show all apps */ }
 
+            // Read once, so every card uses the same language even if it changes mid-load.
+            string wording = PromoLocalization.CurrentWording;
+
             using var doc = JsonDocument.Parse(File.ReadAllText(jsonPath));
             foreach (var app in doc.RootElement.GetProperty("apps").EnumerateArray())
             {
@@ -240,13 +243,35 @@ public sealed partial class PromotedAppsPage : Page
                         ? actionLabel.GetString() ?? "Open"
                         : "View in Store"),
                     Name = app.GetProperty("name").GetString() ?? "",
-                    Blurb = app.GetProperty("blurb").GetString() ?? "",
+                    Blurb = GetBlurb(app, wording),
                     Icon = File.Exists(iconPath) ? new BitmapImage(new Uri(iconPath)) : null,
                 });
             }
         }
         catch { /* a broken promo page must never break the app */ }
         return apps;
+    }
+
+    /// <summary>
+    /// Returns the app's description in <paramref name="wording"/>, one of the page's wording
+    /// catalogs, from the manifest's <c>blurbs</c>. Falls back to the English <c>blurb</c> for
+    /// en-US, for a missing or empty translation, and for manifests from before v2.2.0.
+    /// </summary>
+    private static string GetBlurb(JsonElement app, string wording)
+    {
+        if (app.TryGetProperty("blurbs", out JsonElement blurbs) &&
+            blurbs.ValueKind == JsonValueKind.Object &&
+            blurbs.TryGetProperty(wording, out JsonElement translated) &&
+            translated.ValueKind == JsonValueKind.String)
+        {
+            string? text = translated.GetString();
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                return text;
+            }
+        }
+
+        return app.GetProperty("blurb").GetString() ?? "";
     }
 
     /// <summary>

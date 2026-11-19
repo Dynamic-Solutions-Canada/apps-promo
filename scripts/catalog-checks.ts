@@ -8,6 +8,7 @@
  * which is why the gate checks it on every change.
  */
 import { parseCatalog, type AppLink, type CatalogApp } from '../catalog.js'
+import { findBlurbProblems } from './blurb-checks.js'
 import { readPngSize } from './png-size.js'
 
 /** Catalog icons are 256 px squares (PROMO-5, D-070). */
@@ -33,6 +34,8 @@ interface CatalogSource {
   externalApps: SourceEntry[]
   appOverrides: Record<string, SourceEntry>
   appOrder: string[]
+  /** Translated blurbs by `appId`; validated by `findBlurbProblems`. */
+  blurbTranslations: unknown
 }
 
 /** Inputs to {@link findCatalogProblems}, injected so tests need no files. */
@@ -72,6 +75,7 @@ export function findCatalogProblems(inputs: CatalogInputs): string[] {
     ),
     ...checkLinksPerPlatform(apps),
     ...checkIcons(apps, iconUrlsByAppId(source), inputs.readIcon),
+    ...findBlurbProblems(inputs.manifest, source.blurbTranslations),
   ]
 }
 
@@ -125,6 +129,7 @@ function readSource(value: unknown): CatalogSource | string {
     externalApps: Array.isArray(ids.externalApps) ? ids.externalApps : [],
     appOverrides: ids.appOverrides ?? {},
     appOrder: ids.appOrder,
+    blurbTranslations: ids.blurbTranslations,
   }
 }
 

@@ -28,6 +28,7 @@ The repo owns the catalog data, the script that regenerates it, the WinUI page a
 - **The old repo name stays unused.** Older releases fetch the catalog through the pre-rename owner and repo name and GitHub's redirect; see "Permanent URLs" in the README.
 - **Only `refresh-catalog.ps1` talks to the Store backend.** The page and `catalog.ts` read only the committed public manifest and its icons, so a Store endpoint change cannot break shipped apps. Do not run `refresh-catalog.ps1` unless the maintainer asks: it rewrites the public catalog.
 - **Catalog edits go in `ids.json` and the generated manifest together**, so a later `refresh-catalog.ps1` run preserves them.
+- **App descriptions are translated in `ids.json`.** `blurbTranslations` holds every app's description in the six non-English wording catalogs, with the English it was made from as `source`. Changing an app's English means retranslating all six and updating `source`; `npm run check:catalog` fails until then. Mark new translations in the README's "Languages" table (LOC-12).
 - **Page strings are keyed by their English text** in `Views/PromoLocalization.cs`. A new string is added to every locale table there. The page never references a consumer's localization classes.
 - **The page takes its styles from the host.** It uses only the keys in the README's "Host requirements" table, from winui-app-kit's `Styles.xaml`, and writes no padding, radius or font size inline (UI-3). A new key is a major version, because hosts without it fail when the page opens; `scripts/xaml-keys.test.ts` keeps the table and the page in step.
 - **Keep the page's element names and root.** The ScrollViewer > StackPanel root and `AppList`, `TitleText` and `SubtitleText` are reached by translation adapters in apps on older pins, until each app deletes its adapter (PROMO-7).
@@ -67,4 +68,5 @@ A page-code or `catalog.ts` change is released as an annotated `vX.Y.Z` tag, wit
 | How consumers import or configure the page                              | README "Consuming" and "Page language"                                              |
 | A command                                                               | The Commands table above                                                            |
 | Page code, `catalog.ts` or the projitems                                | Release it with the `release` skill; README "Versioning" says whether it is a major |
+| An app's English description, or a translation review                   | `blurbTranslations` in `ids.json` and the manifest; README "Languages"              |
 | An app gains a public listing, or an app repo publishes its 256 px icon | `ids.json` and a catalog refresh; README "Apps not yet in the catalog" and "Icons"  |

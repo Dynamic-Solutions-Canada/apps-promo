@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import manifest from './Assets/PromotedApps/apps.json'
-import { parseCatalog } from './catalog.js'
+import { blurbFor, parseCatalog, TRANSLATED_WORDINGS } from './catalog.js'
 
 test('the bundled catalog has stable identities and browser-safe platform links', () => {
   const apps = parseCatalog(manifest)
@@ -31,7 +31,7 @@ test('the bundled catalog has stable identities and browser-safe platform links'
   assert.ok(
     apps
       .find((app) => app.appId === 'drive-for-immich')
-      ?.blurb.startsWith('ImmichDrive'),
+      ?.blurb.includes('Immich'),
   )
 })
 
@@ -54,4 +54,40 @@ test('rejects unsafe destinations, icon paths, duplicate ids and old catalog sha
   )
   assert.throws(() => parseCatalog({ apps: [{ name: 'Old catalog' }] }))
   assert.deepEqual(parseCatalog({ apps: [] }), [])
+})
+
+test('every bundled app carries all six translated blurbs', () => {
+  for (const app of parseCatalog(manifest)) {
+    assert.deepEqual(Object.keys(app.blurbs ?? {}), [...TRANSLATED_WORDINGS])
+  }
+})
+
+test('blurbFor resolves a locale to its wording catalog and falls back to English', () => {
+  const app = parseCatalog(manifest).find(
+    (entry) => entry.appId === 'persistent',
+  )!
+
+  assert.equal(blurbFor(app, 'fr-CA'), app.blurbs?.['fr-FR'])
+  assert.equal(blurbFor(app, 'de'), app.blurbs?.['de-DE'])
+  assert.equal(blurbFor(app, 'pt_PT'), app.blurbs?.['pt-BR'])
+  assert.equal(blurbFor(app, 'zh-Hans-SG'), app.blurbs?.['zh-CN'])
+  assert.equal(blurbFor(app, 'zh'), app.blurbs?.['zh-CN'])
+
+  // English, Traditional Chinese and unsupported languages show the English blurb.
+  for (const locale of ['en-CA', 'zh-TW', 'zh-Hant', 'it-IT', '']) {
+    assert.equal(blurbFor(app, locale), app.blurb, locale)
+  }
+})
+
+test('drops malformed translations instead of rejecting the catalog', () => {
+  const value = structuredClone(manifest) as { apps: Record<string, unknown>[] }
+  value.apps[0]!.blurbs = { 'es-ES': 42, 'fr-FR': '', 'de-DE': 'Gut.', xx: 'x' }
+  value.apps[1]!.blurbs = 'not an object'
+  delete value.apps[2]!.blurbs
+
+  const apps = parseCatalog(value)
+  assert.deepEqual(apps[0]!.blurbs, { 'de-DE': 'Gut.' })
+  assert.deepEqual(apps[1]!.blurbs, {})
+  assert.deepEqual(apps[2]!.blurbs, {})
+  assert.equal(blurbFor(apps[0]!, 'es-ES'), apps[0]!.blurb)
 })

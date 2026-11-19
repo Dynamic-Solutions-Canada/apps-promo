@@ -7,6 +7,14 @@
       "actionLabel": "Visit website",
       "name": "PrintStream",
       "blurb": "Manage your 3D printers, one or a whole farm, from any device.",
+      "blurbs": {
+        "es-ES": "Gestiona tus impresoras 3D, una o toda una granja, desde cualquier dispositivo.",
+        "fr-FR": "Gérez vos imprimantes 3D, une seule ou tout un parc, depuis n’importe quel appareil.",
+        "de-DE": "Verwalte deine 3D-Drucker, einen einzelnen oder eine ganze Farm, von jedem Gerät aus.",
+        "zh-CN": "从任何设备管理你的 3D 打印机，无论是一台还是整个打印农场。",
+        "pt-BR": "Gerencie suas impressoras 3D, uma ou uma fazenda inteira, de qualquer dispositivo.",
+        "ja-JP": "1 台からファーム全体まで、どのデバイスからでも 3D プリンターを管理できます。"
+      },
       "packageFamilyName": null,
       "icon": "printstream.png",
       "appId": "printstream",
@@ -33,6 +41,14 @@
       "actionLabel": "View in Store",
       "name": "Persistent",
       "blurb": "Reminders that don't give up.",
+      "blurbs": {
+        "es-ES": "Recordatorios que no se rinden.",
+        "fr-FR": "Des rappels qui n’abandonnent pas.",
+        "de-DE": "Erinnerungen, die nicht aufgeben.",
+        "zh-CN": "不会放弃的提醒。",
+        "pt-BR": "Lembretes que não desistem.",
+        "ja-JP": "あきらめないリマインダー。"
+      },
       "packageFamilyName": "27766TechnicallyReal.Persistent_gfb69tsnc4jnp",
       "icon": "9PCX2XGQ7CJS.png",
       "appId": "persistent",
@@ -59,6 +75,14 @@
       "actionLabel": "View in Store",
       "name": "Little Launcher",
       "blurb": "Launch apps and websites from your tray on Windows and Linux. Windows is available in the Store; Linux uses AppImage.",
+      "blurbs": {
+        "es-ES": "Abre aplicaciones y sitios web desde la bandeja del sistema en Windows y Linux. La versión para Windows está en Microsoft Store; la de Linux usa AppImage.",
+        "fr-FR": "Lancez applications et sites web depuis la zone de notification, sous Windows et Linux. La version Windows est disponible sur le Microsoft Store ; la version Linux utilise AppImage.",
+        "de-DE": "Starte Apps und Websites aus dem Infobereich, unter Windows und Linux. Die Windows-Version gibt es im Microsoft Store, die Linux-Version als AppImage.",
+        "zh-CN": "在 Windows 和 Linux 上从系统托盘启动应用和网站。Windows 版可在 Microsoft Store 获取；Linux 版使用 AppImage。",
+        "pt-BR": "Abra aplicativos e sites pela bandeja do sistema no Windows e no Linux. A versão para Windows está na Microsoft Store; a do Linux usa AppImage.",
+        "ja-JP": "Windows と Linux で、システムトレイからアプリや Web サイトを起動できます。Windows 版は Microsoft Store で、Linux 版は AppImage で提供しています。"
+      },
       "packageFamilyName": "27766TechnicallyReal.LittleLauncher_gfb69tsnc4jnp",
       "icon": "9P3ZZBDQ6PJF.png",
       "appId": "little-launcher",
@@ -74,7 +98,15 @@
       "destination": "ms-windows-store://pdp/?ProductId=9MWC6165N7DH",
       "actionLabel": "View in Store",
       "name": "ImmichDrive",
-      "blurb": "ImmichDrive brings your self-hosted Immich photo and video library straight into Windows File Explorer as a native cloud drive. Your whole timeline appears as files you can...",
+      "blurb": "Your Immich photo and video library in Windows File Explorer, as a native cloud drive.",
+      "blurbs": {
+        "es-ES": "Tu biblioteca de fotos y vídeos de Immich en el Explorador de archivos de Windows, como una unidad en la nube nativa.",
+        "fr-FR": "Votre photothèque et vidéothèque Immich dans l’Explorateur de fichiers Windows, comme un lecteur cloud natif.",
+        "de-DE": "Deine Immich-Foto- und Videobibliothek im Windows-Datei-Explorer, als natives Cloudlaufwerk.",
+        "zh-CN": "将你的 Immich 照片和视频库作为原生云盘接入 Windows 文件资源管理器。",
+        "pt-BR": "Sua biblioteca de fotos e vídeos do Immich no Explorador de Arquivos do Windows, como uma unidade de nuvem nativa.",
+        "ja-JP": "Immich の写真と動画のライブラリを、ネイティブのクラウドドライブとして Windows エクスプローラーに表示します。"
+      },
       "packageFamilyName": "27766TechnicallyReal.ImmichDrive_gfb69tsnc4jnp",
       "icon": "9MWC6165N7DH.png",
       "appId": "drive-for-immich",
@@ -91,6 +123,14 @@
       "actionLabel": "View in Store",
       "name": "Repilot",
       "blurb": "Make your Copilot key actually useful.",
+      "blurbs": {
+        "es-ES": "Haz que tu tecla Copilot sea realmente útil.",
+        "fr-FR": "Rendez votre touche Copilot vraiment utile.",
+        "de-DE": "Mach deine Copilot-Taste wirklich nützlich.",
+        "zh-CN": "让你的 Copilot 键真正派上用场。",
+        "pt-BR": "Torne sua tecla Copilot realmente útil.",
+        "ja-JP": "Copilot キーをもっと便利に。"
+      },
       "packageFamilyName": "27766TechnicallyReal.CopilotKeyRemapper_gfb69tsnc4jnp",
       "icon": "9PB5FJ08PNVJ.png",
       "appId": "repilot",
