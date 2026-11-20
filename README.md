@@ -117,7 +117,7 @@ Every app with a public listing gets an entry when the listing goes live. Choose
 | App                | Waits on                                               | Entry when ready                                                                             |
 | ------------------ | ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
 | Hub Display Switch | Its Microsoft Store name reserved and the listing live | Store product ID in `productIds`, with `appId`, Windows link and `iconUrl` in `appOverrides` |
-| WSL Monitor        | Its Microsoft Store name reserved and the listing live | Store product ID in `productIds`, with `appId`, Windows link and `iconUrl` in `appOverrides` |
+| WSL Status         | Its Microsoft Store name reserved and the listing live | Store product ID in `productIds`, with `appId`, Windows link and `iconUrl` in `appOverrides` |
 | PhoneLock          | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
 | SonarBridge        | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
 | Game's Up          | A public product page, if it gets one                  | `externalApps` entry with the page as destination and Web link                               |
