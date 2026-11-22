@@ -1,5 +1,5 @@
 {
-  "generatedUtc": "2026-09-18T16:09:54Z",
+  "generatedUtc": "2026-11-22T05:06:21Z",
   "publisher": "Dynamic Solutions (CA)",
   "apps": [
     {
@@ -138,6 +138,30 @@
         {
           "platform": "Windows",
           "url": "https://apps.microsoft.com/detail/9PB5FJ08PNVJ",
+          "label": "Microsoft Store"
+        }
+      ]
+    },
+    {
+      "destination": "ms-windows-store://pdp/?ProductId=9P1S2QJFXZFW",
+      "actionLabel": "View in Store",
+      "name": "Hub Display Switch",
+      "blurb": "Plug in a USB hub and your PC switches its displays and audio to match.",
+      "blurbs": {
+        "es-ES": "Conecta un hub USB y tu PC adapta sus pantallas y su audio en consecuencia.",
+        "fr-FR": "Branchez un hub USB et votre PC adapte ses écrans et son audio en conséquence.",
+        "de-DE": "Schließe einen USB-Hub an, und dein PC passt Bildschirme und Audio daran an.",
+        "zh-CN": "插入 USB 集线器，你的电脑就会相应切换显示器和音频。",
+        "pt-BR": "Conecte um hub USB e seu PC ajusta as telas e o áudio de acordo.",
+        "ja-JP": "USB ハブを接続すると、PC がそれに合わせてディスプレイとオーディオを切り替えます。"
+      },
+      "packageFamilyName": "DynamicSolutionsCA.HubDisplaySwitch_3y7xdm7hdtb94",
+      "icon": "9P1S2QJFXZFW.png",
+      "appId": "hub-display-switch",
+      "links": [
+        {
+          "platform": "Windows",
+          "url": "https://apps.microsoft.com/detail/9P1S2QJFXZFW",
           "label": "Microsoft Store"
         }
       ]

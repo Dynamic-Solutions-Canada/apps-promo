@@ -3,7 +3,8 @@
     "9PCX2XGQ7CJS",
     "9P3ZZBDQ6PJF",
     "9MWC6165N7DH",
-    "9PB5FJ08PNVJ"
+    "9PB5FJ08PNVJ",
+    "9P1S2QJFXZFW"
   ],
   "externalApps": [
     {
@@ -35,7 +36,9 @@
   ],
   "blurbOverrides": {
     "9MWC6165N7DH": "Your Immich photo and video library in Windows File Explorer, as a native cloud drive.",
-    "9P3ZZBDQ6PJF": "Launch apps and websites from your tray on Windows and Linux. Windows is available in the Store; Linux uses AppImage."
+    "9P3ZZBDQ6PJF": "Launch apps and websites from your tray on Windows and Linux. Windows is available in the Store; Linux uses AppImage.",
+    "9PCX2XGQ7CJS": "Reminders that don't give up.",
+    "9P1S2QJFXZFW": "Plug in a USB hub and your PC switches its displays and audio to match."
   },
   "blurbTranslations": {
     "printstream": {
@@ -82,6 +85,15 @@
       "zh-CN": "让你的 Copilot 键真正派上用场。",
       "pt-BR": "Torne sua tecla Copilot realmente útil.",
       "ja-JP": "Copilot キーをもっと便利に。"
+    },
+    "hub-display-switch": {
+      "source": "Plug in a USB hub and your PC switches its displays and audio to match.",
+      "es-ES": "Conecta un hub USB y tu PC adapta sus pantallas y su audio en consecuencia.",
+      "fr-FR": "Branchez un hub USB et votre PC adapte ses écrans et son audio en conséquence.",
+      "de-DE": "Schließe einen USB-Hub an, und dein PC passt Bildschirme und Audio daran an.",
+      "zh-CN": "插入 USB 集线器，你的电脑就会相应切换显示器和音频。",
+      "pt-BR": "Conecte um hub USB e seu PC ajusta as telas e o áudio de acordo.",
+      "ja-JP": "USB ハブを接続すると、PC がそれに合わせてディスプレイとオーディオを切り替えます。"
     }
   },
   "appOverrides": {
@@ -135,6 +147,16 @@
           "label": "Visit website"
         }
       ]
+    },
+    "9P1S2QJFXZFW": {
+      "appId": "hub-display-switch",
+      "links": [
+        {
+          "platform": "Windows",
+          "url": "https://apps.microsoft.com/detail/9P1S2QJFXZFW",
+          "label": "Microsoft Store"
+        }
+      ]
     }
   },
   "appOrder": [
@@ -142,6 +164,7 @@
     "persistent",
     "little-launcher",
     "drive-for-immich",
-    "repilot"
+    "repilot",
+    "hub-display-switch"
   ]
 }
