@@ -11,7 +11,11 @@ import { pngHeader } from './png-fixture.js'
 
 /** A deep copy of the committed sources with 50 px icons, so each test can break one thing. */
 /** Committed icons that already come from an app repo at 256 px; the rest stand in at 50 px. */
-const ICONS_AT_256 = new Set(['9N3F55DFWLQP.png', '9P1S2QJFXZFW.png'])
+const ICONS_AT_256 = new Set([
+  '9N3F55DFWLQP.png',
+  '9P1S2QJFXZFW.png',
+  '9MTQWTX87B8J.png',
+])
 
 /** Icon size for a fixture: 256 px for the files in `extra` or ICONS_AT_256, otherwise 50 px. */
 function fixtureIcon(fileName: string, extra: string[] = []): Uint8Array {
@@ -147,6 +151,5 @@ test('lists icons still below 256 px without failing', () => {
     'little-launcher (50 px)',
     'persistent (50 px)',
     'repilot (50 px)',
-    'tray-control-for-wsl (50 px)',
   ])
 })

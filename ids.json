@@ -194,6 +194,7 @@
     },
     "9MTQWTX87B8J": {
       "appId": "tray-control-for-wsl",
+      "iconUrl": "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/tray-control-for-wsl/main/assets/generated/icon-256.png",
       "links": [
         {
           "platform": "Windows",
