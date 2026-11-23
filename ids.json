@@ -171,6 +171,7 @@
     },
     "9N3F55DFWLQP": {
       "appId": "chatmixr",
+      "iconUrl": "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/chatmixr/main/assets/generated/icon-256.png",
       "links": [
         {
           "platform": "Windows",

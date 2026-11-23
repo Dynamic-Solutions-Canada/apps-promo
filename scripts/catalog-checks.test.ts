@@ -10,11 +10,22 @@ import {
 import { pngHeader } from './png-fixture.js'
 
 /** A deep copy of the committed sources with 50 px icons, so each test can break one thing. */
+/** Committed icons that already come from an app repo at 256 px; the rest stand in at 50 px. */
+const ICONS_AT_256 = new Set(['9N3F55DFWLQP.png'])
+
+/** Icon size for a fixture: 256 px for the files in `extra` or ICONS_AT_256, otherwise 50 px. */
+function fixtureIcon(fileName: string, extra: string[] = []): Uint8Array {
+  return pngHeader(
+    ICONS_AT_256.has(fileName) || extra.includes(fileName) ? 256 : 50,
+  )
+}
+
 function committedInputs() {
   return {
     ids: structuredClone(ids) as Record<string, any>,
     manifest: structuredClone(manifest) as Record<string, any>,
-    readIcon: (_fileName: string): Uint8Array | undefined => pngHeader(50),
+    readIcon: (fileName: string): Uint8Array | undefined =>
+      fixtureIcon(fileName),
   }
 }
 
@@ -79,7 +90,7 @@ test('reports a Store product with no appOverrides entry', () => {
 test('reports a missing icon file', () => {
   const inputs = committedInputs()
   inputs.readIcon = (fileName) =>
-    fileName === 'printstream.png' ? undefined : pngHeader(50)
+    fileName === 'printstream.png' ? undefined : fixtureIcon(fileName)
 
   assert.deepEqual(findCatalogProblems(inputs), [
     'printstream icon printstream.png is missing from Assets/PromotedApps/',
@@ -101,7 +112,9 @@ test('reports an icon that is not a PNG, or not square', () => {
     if (fileName === 'printstream.png') {
       return new TextEncoder().encode('<svg></svg> padded to 24 bytes')
     }
-    return fileName === '9PB5FJ08PNVJ.png' ? pngHeader(64, 32) : pngHeader(50)
+    return fileName === '9PB5FJ08PNVJ.png'
+      ? pngHeader(64, 32)
+      : fixtureIcon(fileName)
   }
 
   assert.deepEqual(findCatalogProblems(inputs), [
@@ -119,15 +132,13 @@ test('holds an icon from the app repo path to 256 px', () => {
     'repilot icon 9PB5FJ08PNVJ.png is 50 px; /assets/generated/icon-256.png must be 256 px',
   ])
 
-  inputs.readIcon = (fileName) =>
-    pngHeader(fileName === '9PB5FJ08PNVJ.png' ? 256 : 50)
+  inputs.readIcon = (fileName) => fixtureIcon(fileName, ['9PB5FJ08PNVJ.png'])
   assert.deepEqual(findCatalogProblems(inputs), [])
 })
 
 test('lists icons still below 256 px without failing', () => {
   const inputs = committedInputs()
-  inputs.readIcon = (fileName) =>
-    pngHeader(fileName === 'printstream.png' ? 256 : 50)
+  inputs.readIcon = (fileName) => fixtureIcon(fileName, ['printstream.png'])
 
   assert.deepEqual(listIconsBelowTarget(inputs), [
     'persistent (50 px)',
@@ -135,6 +146,5 @@ test('lists icons still below 256 px without failing', () => {
     'drive-for-immich (50 px)',
     'repilot (50 px)',
     'hub-display-switch (50 px)',
-    'chatmixr (50 px)',
   ])
 })
