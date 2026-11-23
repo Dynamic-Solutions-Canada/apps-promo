@@ -10,7 +10,7 @@ test('the bundled catalog has stable identities and browser-safe platform links'
     apps.map((app) => app.name),
     [
       'ChatMixr',
-      'Display Switchr',
+      'DisplaySwitchr',
       'ImmichDrive',
       'Little Launcher',
       'Persistent',

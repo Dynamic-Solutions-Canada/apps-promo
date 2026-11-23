@@ -100,7 +100,7 @@ The page and the descriptions are in English (United States and Canada), Spanish
 | `pt-BR`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
 | `ja-JP`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
 
-The PrintStream, Persistent and Repilot descriptions reuse Persistent's AI-drafted translations of the same English. The Little Launcher, ImmichDrive, Display Switchr and ChatMixr descriptions were translated new for this catalog. Tray Control for WSL's descriptions are the first sentence of its Store listing's short description in each language. Update the table when a native speaker reviews a catalog.
+The PrintStream, Persistent and Repilot descriptions reuse Persistent's AI-drafted translations of the same English. The Little Launcher, ImmichDrive, DisplaySwitchr and ChatMixr descriptions were translated new for this catalog. Tray Control for WSL's descriptions are the first sentence of its Store listing's short description in each language. Update the table when a native speaker reviews a catalog.
 
 ## Icons
 
