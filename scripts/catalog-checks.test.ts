@@ -15,6 +15,10 @@ const ICONS_AT_256 = new Set([
   '9N3F55DFWLQP.png',
   '9P1S2QJFXZFW.png',
   '9MTQWTX87B8J.png',
+  '9MWC6165N7DH.png',
+  '9P3ZZBDQ6PJF.png',
+  '9PB5FJ08PNVJ.png',
+  '9PCX2XGQ7CJS.png',
 ])
 
 /** Icon size for a fixture: 256 px for the files in `extra` or ICONS_AT_256, otherwise 50 px. */
@@ -131,25 +135,27 @@ test('reports an icon that is not a PNG, or not square', () => {
 
 test('holds an icon from the app repo path to 256 px', () => {
   const inputs = committedInputs()
-  inputs.ids.appOverrides['9PB5FJ08PNVJ'].iconUrl =
-    `https://raw.githubusercontent.com/Dynamic-Solutions-Canada/repilot/main${APP_REPO_ICON_PATH}`
+  assert.equal(
+    inputs.ids.appOverrides['9PB5FJ08PNVJ'].iconUrl,
+    `https://raw.githubusercontent.com/Dynamic-Solutions-Canada/repilot/main${APP_REPO_ICON_PATH}`,
+  )
 
+  // Repilot's icon comes from its repo, so a 50 px file there is a failure.
+  inputs.readIcon = (fileName) =>
+    fileName === '9PB5FJ08PNVJ.png' ? pngHeader(50) : fixtureIcon(fileName)
   assert.deepEqual(findCatalogProblems(inputs), [
     'repilot icon 9PB5FJ08PNVJ.png is 50 px; /assets/generated/icon-256.png must be 256 px',
   ])
 
-  inputs.readIcon = (fileName) => fixtureIcon(fileName, ['9PB5FJ08PNVJ.png'])
+  inputs.readIcon = (fileName) => fixtureIcon(fileName)
   assert.deepEqual(findCatalogProblems(inputs), [])
 })
 
 test('lists icons still below 256 px without failing', () => {
   const inputs = committedInputs()
-  inputs.readIcon = (fileName) => fixtureIcon(fileName, ['printstream.png'])
+  // PrintStream's web icon is the only one still below 256 px, at 192 px.
+  inputs.readIcon = (fileName) =>
+    fileName === 'printstream.png' ? pngHeader(192) : fixtureIcon(fileName)
 
-  assert.deepEqual(listIconsBelowTarget(inputs), [
-    'drive-for-immich (50 px)',
-    'little-launcher (50 px)',
-    'persistent (50 px)',
-    'repilot (50 px)',
-  ])
+  assert.deepEqual(listIconsBelowTarget(inputs), ['printstream (192 px)'])
 })

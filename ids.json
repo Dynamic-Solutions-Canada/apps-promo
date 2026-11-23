@@ -121,6 +121,7 @@
   "appOverrides": {
     "9PB5FJ08PNVJ": {
       "appId": "repilot",
+      "iconUrl": "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/repilot/main/assets/generated/icon-256.png",
       "links": [
         {
           "platform": "Windows",
@@ -131,6 +132,7 @@
     },
     "9P3ZZBDQ6PJF": {
       "appId": "little-launcher",
+      "iconUrl": "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/little-launcher/main/assets/generated/icon-256.png",
       "links": [
         {
           "platform": "Windows",
@@ -141,6 +143,7 @@
     },
     "9MWC6165N7DH": {
       "appId": "drive-for-immich",
+      "iconUrl": "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/immich-drive/main/assets/generated/icon-256.png",
       "links": [
         {
           "platform": "Windows",
@@ -152,6 +155,7 @@
     },
     "9PCX2XGQ7CJS": {
       "appId": "persistent",
+      "iconUrl": "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/persistent/main/assets/generated/icon-256.png",
       "links": [
         {
           "platform": "Windows",
