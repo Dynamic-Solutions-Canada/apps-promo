@@ -1,5 +1,5 @@
 {
-  "generatedUtc": "2026-11-22T05:06:21Z",
+  "generatedUtc": "2026-11-23T00:56:04Z",
   "publisher": "Dynamic Solutions (CA)",
   "apps": [
     {
@@ -162,6 +162,30 @@
         {
           "platform": "Windows",
           "url": "https://apps.microsoft.com/detail/9P1S2QJFXZFW",
+          "label": "Microsoft Store"
+        }
+      ]
+    },
+    {
+      "destination": "ms-windows-store://pdp/?ProductId=9N3F55DFWLQP",
+      "actionLabel": "View in Store",
+      "name": "ChatMixr",
+      "blurb": "Balance game and chat audio on any headset, with a slider or your Arctis ChatMix wheel.",
+      "blurbs": {
+        "es-ES": "Equilibra el audio del juego y del chat en cualquier headset, con un control deslizante o la rueda ChatMix de tus Arctis.",
+        "fr-FR": "Équilibrez le son du jeu et du chat sur n’importe quel casque, avec un curseur ou la molette ChatMix de votre Arctis.",
+        "de-DE": "Stimme Spiel- und Chat-Audio auf jedem Headset aufeinander ab, per Schieberegler oder mit dem ChatMix-Rad deines Arctis.",
+        "zh-CN": "在任何耳机上平衡游戏和聊天音频，可使用滑块或 Arctis 的 ChatMix 滚轮。",
+        "pt-BR": "Equilibre o áudio do jogo e do chat em qualquer headset, com um controle deslizante ou a roda ChatMix do seu Arctis.",
+        "ja-JP": "どのヘッドセットでも、スライダーまたは Arctis の ChatMix ホイールでゲームとチャットの音量バランスを調整できます。"
+      },
+      "packageFamilyName": "DynamicSolutionsCA.ChatMixr_3y7xdm7hdtb94",
+      "icon": "9N3F55DFWLQP.png",
+      "appId": "chatmixr",
+      "links": [
+        {
+          "platform": "Windows",
+          "url": "https://apps.microsoft.com/detail/9N3F55DFWLQP",
           "label": "Microsoft Store"
         }
       ]

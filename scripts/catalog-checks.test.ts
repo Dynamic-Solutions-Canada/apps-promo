@@ -135,5 +135,6 @@ test('lists icons still below 256 px without failing', () => {
     'drive-for-immich (50 px)',
     'repilot (50 px)',
     'hub-display-switch (50 px)',
+    'chatmixr (50 px)',
   ])
 })

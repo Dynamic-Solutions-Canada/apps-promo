@@ -5,7 +5,7 @@ import { blurbFor, parseCatalog, TRANSLATED_WORDINGS } from './catalog.js'
 
 test('the bundled catalog has stable identities and browser-safe platform links', () => {
   const apps = parseCatalog(manifest)
-  assert.equal(apps.length, 6)
+  assert.equal(apps.length, 7)
   assert.deepEqual(
     apps.map((app) => app.name),
     [
@@ -15,6 +15,7 @@ test('the bundled catalog has stable identities and browser-safe platform links'
       'ImmichDrive',
       'Repilot',
       'Hub Display Switch',
+      'ChatMixr',
     ],
   )
   assert.deepEqual(
@@ -29,7 +30,7 @@ test('the bundled catalog has stable identities and browser-safe platform links'
       ?.links.map((link) => link.platform),
     ['Android', 'Windows', 'Web'],
   )
-  assert.equal(apps.filter((app) => app.appId !== 'persistent').length, 5)
+  assert.equal(apps.filter((app) => app.appId !== 'persistent').length, 6)
   assert.ok(
     apps
       .find((app) => app.appId === 'printstream')

@@ -4,7 +4,8 @@
     "9P3ZZBDQ6PJF",
     "9MWC6165N7DH",
     "9PB5FJ08PNVJ",
-    "9P1S2QJFXZFW"
+    "9P1S2QJFXZFW",
+    "9N3F55DFWLQP"
   ],
   "externalApps": [
     {
@@ -38,7 +39,8 @@
     "9MWC6165N7DH": "Your Immich photo and video library in Windows File Explorer, as a native cloud drive.",
     "9P3ZZBDQ6PJF": "Launch apps and websites from your tray on Windows and Linux. Windows is available in the Store; Linux uses AppImage.",
     "9PCX2XGQ7CJS": "Reminders that don't give up.",
-    "9P1S2QJFXZFW": "Plug in a USB hub and your PC switches its displays and audio to match."
+    "9P1S2QJFXZFW": "Plug in a USB hub and your PC switches its displays and audio to match.",
+    "9N3F55DFWLQP": "Balance game and chat audio on any headset, with a slider or your Arctis ChatMix wheel."
   },
   "blurbTranslations": {
     "printstream": {
@@ -94,6 +96,15 @@
       "zh-CN": "插入 USB 集线器，你的电脑就会相应切换显示器和音频。",
       "pt-BR": "Conecte um hub USB e seu PC ajusta as telas e o áudio de acordo.",
       "ja-JP": "USB ハブを接続すると、PC がそれに合わせてディスプレイとオーディオを切り替えます。"
+    },
+    "chatmixr": {
+      "source": "Balance game and chat audio on any headset, with a slider or your Arctis ChatMix wheel.",
+      "es-ES": "Equilibra el audio del juego y del chat en cualquier headset, con un control deslizante o la rueda ChatMix de tus Arctis.",
+      "fr-FR": "Équilibrez le son du jeu et du chat sur n’importe quel casque, avec un curseur ou la molette ChatMix de votre Arctis.",
+      "de-DE": "Stimme Spiel- und Chat-Audio auf jedem Headset aufeinander ab, per Schieberegler oder mit dem ChatMix-Rad deines Arctis.",
+      "zh-CN": "在任何耳机上平衡游戏和聊天音频，可使用滑块或 Arctis 的 ChatMix 滚轮。",
+      "pt-BR": "Equilibre o áudio do jogo e do chat em qualquer headset, com um controle deslizante ou a roda ChatMix do seu Arctis.",
+      "ja-JP": "どのヘッドセットでも、スライダーまたは Arctis の ChatMix ホイールでゲームとチャットの音量バランスを調整できます。"
     }
   },
   "appOverrides": {
@@ -157,6 +168,16 @@
           "label": "Microsoft Store"
         }
       ]
+    },
+    "9N3F55DFWLQP": {
+      "appId": "chatmixr",
+      "links": [
+        {
+          "platform": "Windows",
+          "url": "https://apps.microsoft.com/detail/9N3F55DFWLQP",
+          "label": "Microsoft Store"
+        }
+      ]
     }
   },
   "appOrder": [
@@ -165,6 +186,7 @@
     "little-launcher",
     "drive-for-immich",
     "repilot",
-    "hub-display-switch"
+    "hub-display-switch",
+    "chatmixr"
   ]
 }
