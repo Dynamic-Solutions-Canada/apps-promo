@@ -161,7 +161,7 @@
     },
     "9P1S2QJFXZFW": {
       "appId": "hub-display-switch",
-      "iconUrl": "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/hub-display-switch/main/assets/generated/icon-256.png",
+      "iconUrl": "https://raw.githubusercontent.com/Dynamic-Solutions-Canada/display-switchr/main/assets/generated/icon-256.png",
       "links": [
         {
           "platform": "Windows",

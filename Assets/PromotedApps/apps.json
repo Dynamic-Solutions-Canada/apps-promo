@@ -1,5 +1,5 @@
 {
-  "generatedUtc": "2026-11-23T00:56:04Z",
+  "generatedUtc": "2026-11-23T17:26:43Z",
   "publisher": "Dynamic Solutions (CA)",
   "apps": [
     {
@@ -145,7 +145,7 @@
     {
       "destination": "ms-windows-store://pdp/?ProductId=9P1S2QJFXZFW",
       "actionLabel": "View in Store",
-      "name": "Hub Display Switch",
+      "name": "Display Switchr",
       "blurb": "Plug in a USB hub and your PC switches its displays and audio to match.",
       "blurbs": {
         "es-ES": "Conecta un hub USB y tu PC adapta sus pantallas y su audio en consecuencia.",

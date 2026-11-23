@@ -14,7 +14,7 @@ test('the bundled catalog has stable identities and browser-safe platform links'
       'Little Launcher',
       'ImmichDrive',
       'Repilot',
-      'Hub Display Switch',
+      'Display Switchr',
       'ChatMixr',
     ],
   )

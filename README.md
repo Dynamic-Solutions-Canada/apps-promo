@@ -100,7 +100,7 @@ The page and the descriptions are in English (United States and Canada), Spanish
 | `pt-BR`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
 | `ja-JP`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
 
-The PrintStream, Persistent and Repilot descriptions reuse Persistent's AI-drafted translations of the same English. The Little Launcher, ImmichDrive, Hub Display Switch and ChatMixr descriptions were translated new for this catalog. Update the table when a native speaker reviews a catalog.
+The PrintStream, Persistent and Repilot descriptions reuse Persistent's AI-drafted translations of the same English. The Little Launcher, ImmichDrive, Display Switchr and ChatMixr descriptions were translated new for this catalog. Update the table when a native speaker reviews a catalog.
 
 ## Icons
 
@@ -114,12 +114,12 @@ Catalog icons are 256 px squares, taken from each app repo at `assets/generated/
 
 Every app with a public listing gets an entry when the listing goes live. Choose its `appId` once; it never changes, even if the product is renamed. These shipped apps are missing, and each waits on the item named:
 
-| App         | Waits on                                               | Entry when ready                                                                             |
-| ----------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| WSL Status  | Its Microsoft Store name reserved and the listing live | Store product ID in `productIds`, with `appId`, Windows link and `iconUrl` in `appOverrides` |
-| PhoneLock   | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
-| SonarBridge | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
-| Game's Up   | A public product page, if it gets one                  | `externalApps` entry with the page as destination and Web link                               |
+| App                  | Waits on                                               | Entry when ready                                                                             |
+| -------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| Tray Control for WSL | Its Microsoft Store name reserved and the listing live | Store product ID in `productIds`, with `appId`, Windows link and `iconUrl` in `appOverrides` |
+| PhoneLock            | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
+| SonarBridge          | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
+| Game's Up            | A public product page, if it gets one                  | `externalApps` entry with the page as destination and Web link                               |
 
 Every new entry also needs its app repo's 256 px icon at `assets/generated/icon-256.png` for its `iconUrl`, a place in `appOrder`, and its description in all six translated wording catalogs under `blurbTranslations`. Internal and client-specific apps are not listed.
 
