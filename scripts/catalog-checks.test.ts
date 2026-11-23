@@ -57,7 +57,9 @@ test('reports a manifest out of appOrder order', () => {
 
 test('reports links edited in only one of the two files', () => {
   const inputs = committedInputs()
-  inputs.manifest.apps[0].links.pop()
+  inputs.manifest.apps
+    .find((app: any) => app.appId === 'printstream')
+    .links.pop()
 
   assert.deepEqual(findCatalogProblems(inputs), [
     'printstream links in apps.json differ from its links in ids.json',
@@ -141,9 +143,10 @@ test('lists icons still below 256 px without failing', () => {
   inputs.readIcon = (fileName) => fixtureIcon(fileName, ['printstream.png'])
 
   assert.deepEqual(listIconsBelowTarget(inputs), [
-    'persistent (50 px)',
-    'little-launcher (50 px)',
     'drive-for-immich (50 px)',
+    'little-launcher (50 px)',
+    'persistent (50 px)',
     'repilot (50 px)',
+    'tray-control-for-wsl (50 px)',
   ])
 })

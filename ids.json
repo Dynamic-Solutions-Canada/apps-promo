@@ -5,7 +5,8 @@
     "9MWC6165N7DH",
     "9PB5FJ08PNVJ",
     "9P1S2QJFXZFW",
-    "9N3F55DFWLQP"
+    "9N3F55DFWLQP",
+    "9MTQWTX87B8J"
   ],
   "externalApps": [
     {
@@ -40,7 +41,8 @@
     "9P3ZZBDQ6PJF": "Launch apps and websites from your tray on Windows and Linux. Windows is available in the Store; Linux uses AppImage.",
     "9PCX2XGQ7CJS": "Reminders that don't give up.",
     "9P1S2QJFXZFW": "Plug in a USB hub and your PC switches its displays and audio to match.",
-    "9N3F55DFWLQP": "Balance game and chat audio on any headset, with a slider or your Arctis ChatMix wheel."
+    "9N3F55DFWLQP": "Balance game and chat audio on any headset, with a slider or your Arctis ChatMix wheel.",
+    "9MTQWTX87B8J": "See at a glance which of your WSL distros are running, and start or stop them from the Windows tray."
   },
   "blurbTranslations": {
     "printstream": {
@@ -105,6 +107,15 @@
       "zh-CN": "在任何耳机上平衡游戏和聊天音频，可使用滑块或 Arctis 的 ChatMix 滚轮。",
       "pt-BR": "Equilibre o áudio do jogo e do chat em qualquer headset, com um controle deslizante ou a roda ChatMix do seu Arctis.",
       "ja-JP": "どのヘッドセットでも、スライダーまたは Arctis の ChatMix ホイールでゲームとチャットの音量バランスを調整できます。"
+    },
+    "tray-control-for-wsl": {
+      "source": "See at a glance which of your WSL distros are running, and start or stop them from the Windows tray.",
+      "es-ES": "Consulta de un vistazo qué distribuciones de WSL están en ejecución, e inícialas o detenlas desde la bandeja del sistema.",
+      "fr-FR": "Voyez en un coup d’œil quelles distributions WSL sont en cours d’exécution, et démarrez-les ou arrêtez-les depuis la zone de notification.",
+      "de-DE": "Sieh auf einen Blick, welche WSL-Distributionen laufen, und starte oder beende sie im Infobereich der Taskleiste.",
+      "zh-CN": "一眼看出哪些 WSL 发行版正在运行，并从系统托盘启动或停止它们。",
+      "pt-BR": "Veja num relance quais distribuições do WSL estão em execução e inicie ou pare-as pela bandeja do sistema.",
+      "ja-JP": "実行中の WSL ディストリビューションがひと目でわかり、システム トレイから起動や停止ができます。"
     }
   },
   "appOverrides": {
@@ -180,15 +191,26 @@
           "label": "Microsoft Store"
         }
       ]
+    },
+    "9MTQWTX87B8J": {
+      "appId": "tray-control-for-wsl",
+      "links": [
+        {
+          "platform": "Windows",
+          "url": "https://apps.microsoft.com/detail/9MTQWTX87B8J",
+          "label": "Microsoft Store"
+        }
+      ]
     }
   },
   "appOrder": [
-    "printstream",
-    "persistent",
-    "little-launcher",
-    "drive-for-immich",
-    "repilot",
+    "chatmixr",
     "hub-display-switch",
-    "chatmixr"
+    "drive-for-immich",
+    "little-launcher",
+    "persistent",
+    "printstream",
+    "repilot",
+    "tray-control-for-wsl"
   ]
 }

@@ -5,18 +5,27 @@ import { blurbFor, parseCatalog, TRANSLATED_WORDINGS } from './catalog.js'
 
 test('the bundled catalog has stable identities and browser-safe platform links', () => {
   const apps = parseCatalog(manifest)
-  assert.equal(apps.length, 7)
+  assert.equal(apps.length, 8)
   assert.deepEqual(
     apps.map((app) => app.name),
     [
-      'PrintStream',
-      'Persistent',
-      'Little Launcher',
-      'ImmichDrive',
-      'Repilot',
-      'Display Switchr',
       'ChatMixr',
+      'Display Switchr',
+      'ImmichDrive',
+      'Little Launcher',
+      'Persistent',
+      'PrintStream',
+      'Repilot',
+      'Tray Control for WSL',
     ],
+  )
+  // appOrder lists the apps alphabetically by display name, ignoring case.
+  const names = apps.map((app) => app.name)
+  assert.deepEqual(
+    names,
+    [...names].sort((a, b) =>
+      a.localeCompare(b, 'en', { sensitivity: 'base' }),
+    ),
   )
   assert.deepEqual(
     apps
@@ -30,7 +39,7 @@ test('the bundled catalog has stable identities and browser-safe platform links'
       ?.links.map((link) => link.platform),
     ['Android', 'Windows', 'Web'],
   )
-  assert.equal(apps.filter((app) => app.appId !== 'persistent').length, 6)
+  assert.equal(apps.filter((app) => app.appId !== 'persistent').length, 7)
   assert.ok(
     apps
       .find((app) => app.appId === 'printstream')

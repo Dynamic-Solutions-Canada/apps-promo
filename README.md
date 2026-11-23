@@ -67,7 +67,7 @@ Import the bundled JSON and icons for the first offline visit. Refresh the publi
 
 The consumer's checkout and build context must include this submodule. Catalog metadata edits go in `ids.json` as well as the generated manifest so a later `refresh-catalog.ps1` run preserves them.
 
-`appOrder` in `ids.json` sets the shared display order across Store and web apps. Every app must appear exactly once. Consumers retain that order when hiding their own product. An optional `name` in `appOverrides` pins a publisher-approved display name instead of the current Store listing title; stable `appId` values remain unchanged when a product is renamed.
+`appOrder` in `ids.json` sets the shared display order across Store and web apps: alphabetical by display name, ignoring case. Every app must appear exactly once, and a new app goes in its alphabetical place. Consumers retain that order when hiding their own product. An optional `name` in `appOverrides` pins a publisher-approved display name instead of the current Store listing title; stable `appId` values remain unchanged when a product is renamed.
 
 Little Launcher's catalog description covers Windows and Linux AppImage. Keep that wording in `ids.json` under `blurbOverrides` as well as the generated manifest so refreshes preserve it. Its existing Store destination is for Windows; Linux AppImage downloads are available from the Little Launcher GitHub releases page.
 
@@ -100,7 +100,7 @@ The page and the descriptions are in English (United States and Canada), Spanish
 | `pt-BR`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
 | `ja-JP`         | AI-drafted, unreviewed | AI-drafted, unreviewed |
 
-The PrintStream, Persistent and Repilot descriptions reuse Persistent's AI-drafted translations of the same English. The Little Launcher, ImmichDrive, Display Switchr and ChatMixr descriptions were translated new for this catalog. Update the table when a native speaker reviews a catalog.
+The PrintStream, Persistent and Repilot descriptions reuse Persistent's AI-drafted translations of the same English. The Little Launcher, ImmichDrive, Display Switchr and ChatMixr descriptions were translated new for this catalog. Tray Control for WSL's descriptions are the first sentence of its Store listing's short description in each language. Update the table when a native speaker reviews a catalog.
 
 ## Icons
 
@@ -114,14 +114,13 @@ Catalog icons are 256 px squares, taken from each app repo at `assets/generated/
 
 Every app with a public listing gets an entry when the listing goes live. Choose its `appId` once; it never changes, even if the product is renamed. These shipped apps are missing, and each waits on the item named:
 
-| App                  | Waits on                                               | Entry when ready                                                                             |
-| -------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| Tray Control for WSL | Its Microsoft Store name reserved and the listing live | Store product ID in `productIds`, with `appId`, Windows link and `iconUrl` in `appOverrides` |
-| PhoneLock            | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
-| SonarBridge          | A Google Play listing                                  | `externalApps` entry with the Play link as destination and Android link                      |
-| Game's Up            | A public product page, if it gets one                  | `externalApps` entry with the page as destination and Web link                               |
+| App         | Waits on                              | Entry when ready                                                        |
+| ----------- | ------------------------------------- | ----------------------------------------------------------------------- |
+| PhoneLock   | A Google Play listing                 | `externalApps` entry with the Play link as destination and Android link |
+| SonarBridge | A Google Play listing                 | `externalApps` entry with the Play link as destination and Android link |
+| Game's Up   | A public product page, if it gets one | `externalApps` entry with the page as destination and Web link          |
 
-Every new entry also needs its app repo's 256 px icon at `assets/generated/icon-256.png` for its `iconUrl`, a place in `appOrder`, and its description in all six translated wording catalogs under `blurbTranslations`. Internal and client-specific apps are not listed.
+Every new entry also needs its app repo's 256 px icon at `assets/generated/icon-256.png` for its `iconUrl`, its alphabetical place in `appOrder`, and its description in all six translated wording catalogs under `blurbTranslations`. Internal and client-specific apps are not listed.
 
 ## Versioning
 
